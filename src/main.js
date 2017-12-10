@@ -1,24 +1,22 @@
 import Vue from 'vue'
-import VueRouter from "vue-router"
-
+import router from './router'
 import App from './app.vue'
 
-Vue.use(VueRouter)
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI)
 
-const NotFound = { template: '<p>Page not found</p>' }
-const Yeah = { template: '<p>YEAAAAH!!!</p>' }
+
+const NotFound = {template: '<p>Page not found</p>'}
+const Yeah = {template: '<p>YEAAAAH!!!</p>'}
 
 
-const router = new VueRouter({
-	routes: [
-		{ path: '/', component: App },
-		{ path: '/user', component: App },
-		{ path: '/yeah', component: Yeah }
-	],
-	mode: 'history'
-})
-
-export var mainVue = new Vue({
-	router,
-}).$mount("#app");
+export const mainVue = new Vue({
+	el: '#app',
+	template: "<app/>",
+	components: {
+		'app': App
+	},
+	router
+}).$mount("#app")
 
