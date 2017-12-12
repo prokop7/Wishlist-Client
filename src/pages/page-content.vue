@@ -2,9 +2,9 @@
 	<div id="page-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
-				<span>{{wishLists[0].name}}</span>
+				<span>{{wishlists[0].name}}</span>
 			</div>
-			<div v-for="item in wishLists[0].items" :key="item.id" class="text item">
+			<div v-for="item in $store.state.user.wishlists[0].items" :key="item.id" class="text item">
 				{{item.name}}
 			</div>
 		</el-card>
@@ -17,7 +17,7 @@
 	import api from "@/api"
 
 	const data = {
-		wishLists: [{name: "Blank", id: 0, items: []}],
+		wishlists: [{name: "Blank", id: 0, items: []}],
 		userId: 0
 	};
 
@@ -30,11 +30,11 @@
 			loadWishLists() {
 				if (!this.userId)
 					return;
-				console.log("Start loading");
 				api.request("GET", "http://localhost:8080/user/" + this.userId, {}, this.setWishLists, this.errorHandle)
 			},
 			setWishLists(result) {
-				data.wishLists = result['wishlists']
+				data.wishlists = result['wishlists']
+				this.$store.commit('setUser', result)
 			},
 			errorHandle(e, eMessage) {
 				this.$router.push('/404');

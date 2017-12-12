@@ -9,7 +9,32 @@ import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Vuex)
 Vue.use(ElementUI)
 
-const Yeah = {template: '<p>YEAAAAH!!!</p>'}
+const store = new Vuex.Store({
+	state: {
+		count: 0,
+		user: {
+			name: "",
+			photoLink: "",
+			wishlists: [{name: "Blank", id: 0, items: []}]
+		},
+	},
+	getters: {
+		user(state) {
+			return state.user
+		},
+		wishlists(state) {
+			return state.user.wishlists
+		}
+	},
+	mutations: {
+		increment(state) {
+			state.count++
+		},
+		setUser(state, user) {
+			state.user = user
+		}
+	}
+});
 
 
 export const mainVue = new Vue({
@@ -18,6 +43,7 @@ export const mainVue = new Vue({
 	components: {
 		'app': App
 	},
-	router
+	router,
+	store
 }).$mount("#app")
 
