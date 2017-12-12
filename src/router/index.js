@@ -9,6 +9,8 @@ export default new Router({
 	routes: [
 		{ path: '/', component: Content },
 		{ path: '/user/:userId', component: Content },
+		{ path: '/404', component: {template:
+			'<div><p>Page not found</p><router-link to="/user/1">To /user/1</router-link></div>'}}
 	],
 	mode: 'history'
 })

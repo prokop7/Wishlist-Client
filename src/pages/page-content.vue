@@ -8,7 +8,7 @@
 				{{item.name}}
 			</div>
 		</el-card>
-		<el-button @click="$router.push('/user/1')">Go to /user/1</el-button>
+		<el-button @click="$router.push('/user/' + (parseInt(userId) + 1))">Go to /user/{{parseInt(userId) + 1}}</el-button>
 		<a href="https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=http://10.241.1.87:8081/user&scope=3">OAuth2 Link</a>
 	</div>
 </template>
@@ -37,6 +37,7 @@
 				data.wishLists = result['wishlists']
 			},
 			errorHandle(e, eMessage) {
+				this.$router.push('/404');
 				console.log(e)
 			}
 		},
