@@ -11,6 +11,11 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  devServer: {
+      historyApiFallback:{
+          index:'/'
+      },
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

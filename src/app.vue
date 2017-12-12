@@ -6,8 +6,8 @@
 			</el-header>
 			<el-container>
 				<el-main>
-					<page-content>
-					</page-content>
+					<router-view>
+					</router-view>
 				</el-main>
 			</el-container>
 		</el-container>
@@ -35,7 +35,7 @@
 			return data;
 		},
 		mounted: function () {
-			console.log(this)
+//			console.log(this)
 			this.code = this.$route.query["code"]
 			this.check()
 		},
@@ -73,6 +73,14 @@
 	}
 
 	.el-container, .el-main, #page-content {
+		height: 100%;
+	}
+
+	 html, body{
+		 height:100%;
+		 margin: 0;
+	 }
+	#app {
 		height: 100%;
 	}
 

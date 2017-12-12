@@ -8,6 +8,7 @@ Vue.use(Router)
 export default new Router({
 	routes: [
 		{ path: '/', component: Content },
+		{ path: '/user/:userId', component: Content },
 	],
 	mode: 'history'
 })
