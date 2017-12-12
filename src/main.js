@@ -15,8 +15,9 @@ const store = new Vuex.Store({
 		user: {
 			name: "",
 			photoLink: "",
-			wishlists: [{name: "Blank", id: 0, items: []}]
-		},
+			wishlists: [{name: "Blank", id: 0, items: []}],
+			friends: [{name: "Default name", id: -1}]
+		}
 	},
 	getters: {
 		user(state) {
@@ -24,6 +25,12 @@ const store = new Vuex.Store({
 		},
 		wishlists(state) {
 			return state.user.wishlists
+		},
+		friends(state) {
+			return state.user.friends
+		},
+		wishlistsCount(state, getters) {
+			return getters.wishlists.length
 		}
 	},
 	mutations: {

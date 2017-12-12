@@ -62,6 +62,7 @@
 		color: #333;
 		text-align: center;
 		line-height: 60px;
+		padding: 0;
 	}
 
 	.el-main {

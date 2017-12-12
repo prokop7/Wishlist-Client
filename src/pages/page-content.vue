@@ -1,40 +1,62 @@
 <template>
 	<div id="page-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>{{wishlists[0].name}}</span>
+		<el-row :gutter="10">
+			<div class="el-col el-col-6"
+			     style="padding-left: 5px; padding-right: 5px;"
+			     v-for="wishlist in wishlists">
+				<div class="grid-content">
+					<el-card class="box-card">
+						<div slot="header" class="clearfix">
+							<span>{{wishlist.name}}</span>
+						</div>
+						<div v-for="item in wishlist.items" :key="item.id" class="text item">
+							{{item.name}}
+						</div>
+					</el-card>
+				</div>
 			</div>
-			<div v-for="item in $store.state.user.wishlists[0].items" :key="item.id" class="text item">
-				{{item.name}}
-			</div>
-		</el-card>
-		<el-button @click="$router.push('/user/' + (parseInt(userId) + 1))">Go to /user/{{parseInt(userId) + 1}}</el-button>
-		<a href="https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=http://10.241.1.87:8081/user&scope=3">OAuth2 Link</a>
+		</el-row>
 	</div>
 </template>
 <script>
 	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 	import api from "@/api"
-
-	const data = {
-		wishlists: [{name: "Blank", id: 0, items: []}],
-		userId: 0
-	};
+	import ElCol from "element-ui/packages/col/src/col";
 
 	export default {
-		components: {ElButton},
+		components: {
+			ElCol,
+			ElButton
+		},
 		data: function () {
-			return data;
+			return {
+				wishlists: [{name: "Blank", id: 0, items: []}],
+				userId: 0
+			};
 		},
 		methods: {
-			loadWishLists() {
-				if (!this.userId)
-					return;
-				api.request("GET", "http://localhost:8080/user/" + this.userId, {}, this.setWishLists, this.errorHandle)
+			setupUser(userId) {
+				this.userId = userId;
+				api.request("GET", "http://localhost:8080/user/" + userId, {}, this.setUser, this.errorHandle)
+			},
+			loadWishLists(userId) {
+				api.request("GET", "http://localhost:8080/user/" + userId, {}, this.setWishLists, this.errorHandle)
 			},
 			setWishLists(result) {
-				data.wishlists = result['wishlists']
+				this.wishlists = result['wishlists']
+				this.resize();
+			},
+			setUser(result) {
+				this.wishlists = result['wishlists']
 				this.$store.commit('setUser', result)
+				this.resize();
+			},
+			resize() {
+				let count = this.wishlists.length;
+				if (count > 6) {
+					document.getElementById('app').style.width = count / 6.0 * 100 + "%";
+				} else
+					document.getElementById('app').style.width = '100%';
 			},
 			errorHandle(e, eMessage) {
 				this.$router.push('/404');
@@ -42,13 +64,12 @@
 			}
 		},
 		mounted: function () {
-			data.userId = this.$route.params['userId']
-			this.loadWishLists();
+			this.setupUser(1);
+			this.loadWishLists(this.$route.params['userId']);
 		},
 		watch: {
-			'$route' (to, from) {
-				data.userId = to.params['userId']
-				this.loadWishLists();
+			'$route'(to, from) {
+				this.loadWishLists(to.params['userId']);
 			}
 		}
 	}
@@ -74,6 +95,17 @@
 	}
 
 	.box-card {
-		width: 300px;
+		width: 100%;
+	}
+
+	.el-row {
+		margin-bottom: 20px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.el-col {
+		border-radius: 4px;
 	}
 </style>
