@@ -17,7 +17,8 @@ const store = new Vuex.Store({
 			photoLink: "",
 			wishlists: [{name: "Blank", id: 0, items: []}],
 			friends: [{name: "Default name", id: -1}]
-		}
+		},
+		token: ""
 	},
 	getters: {
 		user(state) {
@@ -39,6 +40,9 @@ const store = new Vuex.Store({
 		},
 		setUser(state, user) {
 			state.user = user
+		},
+		token(state, value) {
+			state.token = value
 		}
 	}
 });

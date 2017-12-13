@@ -14,7 +14,6 @@
 	</div>
 </template>
 <script>
-	import Ajax from "@/api"
 	import TopBar from "./pages/top-bar.vue"
 	import PageContent from "./pages/page-content.vue"
 	import ElAside from "../node_modules/element-ui/packages/aside/src/main.vue";
@@ -34,25 +33,6 @@
 		data: function () {
 			return data;
 		},
-		mounted: function () {
-//			console.log(this)
-			this.code = this.$route.query["code"]
-			this.check()
-		},
-		methods: {
-			check: function () {
-				if (this.code) {
-					const _this = this
-					Ajax.request("GET", "http://10.241.1.87:8080/user/registration?code=" + _this.code, {}, function () {
-						_this.$router.push("/yeah")
-					}, function () {
-						console.log("ERROR")
-					})
-				}
-				console.log("EMPTY")
-			}
-		}
-
 	}
 </script>
 

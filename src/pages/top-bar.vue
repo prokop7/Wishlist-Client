@@ -18,8 +18,8 @@
 				</el-menu-item>
 			</el-submenu>
 			<el-menu-item index="10" id="login-link">
-				<a href="https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=http://10.241.1.87:8081/user&scope=3"
-				target="_blank">OAuth2 Link</a>
+				<a href="https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=http://10.241.1.87:8081/registration&scope=3"
+				target="_self">{{loginState}}</a>
 			</el-menu-item>
 		</el-menu>
 	</div>
@@ -29,6 +29,7 @@
 	export default {
 		data: function () {
 			return {
+				loginState: this.$store.state.token ? 'Logout' : 'Login'
 			}
 		},
 		components: {},

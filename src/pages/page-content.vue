@@ -1,7 +1,7 @@
 <template>
 	<div id="page-content">
 		<el-row :gutter="10">
-			<div class="el-col el-col-6"
+			<div class="el-col el-col-4"
 			     style="padding-left: 5px; padding-right: 5px;"
 			     v-for="wishlist in wishlists">
 				<div class="grid-content">
@@ -35,12 +35,8 @@
 			};
 		},
 		methods: {
-			setupUser(userId) {
-				this.userId = userId;
-				api.request("GET", "http://localhost:8080/user/" + userId, {}, this.setUser, this.errorHandle)
-			},
 			loadWishLists(userId) {
-				api.request("GET", "http://localhost:8080/user/" + userId, {}, this.setWishLists, this.errorHandle)
+				api.request("GET", "http://localhost:8080/user/" + userId, {}, this.setWishLists, this.errorHandle, this.$store.state.token)
 			},
 			setWishLists(result) {
 				this.wishlists = result['wishlists']
@@ -61,10 +57,10 @@
 			errorHandle(e, eMessage) {
 				this.$router.push('/404');
 				console.log(e)
+				console.log(eMessage)
 			}
 		},
 		mounted: function () {
-			this.setupUser(1);
 			this.loadWishLists(this.$route.params['userId']);
 		},
 		watch: {

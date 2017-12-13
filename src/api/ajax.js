@@ -1,9 +1,12 @@
 // Default implementation of AJAX request
-export function request(type, url, data, successCallback, errorCallback) {
+export function request(type, url, data, successCallback, errorCallback, token) {
 	var xhr = new XMLHttpRequest();
 	xhr.open(type, url, true);
 	xhr.setRequestHeader('Accept', 'application/json');
 	xhr.setRequestHeader('Content-Type', 'application/json');
+	if (token) {
+		xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+	}
 	xhr.onload = function () {
 		if (xhr.status >= 200 && xhr.status < 400) {
 			console.log(xhr)
@@ -20,7 +23,8 @@ export function request(type, url, data, successCallback, errorCallback) {
 					successCallback(result);
 			} else {
 				if (successCallback)
-					successCallback({});;
+					successCallback({});
+				;
 			}
 		}
 		else {
