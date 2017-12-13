@@ -1,8 +1,8 @@
 <template>
 	<div id="page-content">
-		<el-button type="text" @click="dialogFormVisible = true">Create wishlist</el-button>
+		<el-button type="text" @click="wishlistFormVisible = true">Create wishlist</el-button>
 		<el-row :gutter="10">
-			<div class="el-col el-col-4"
+			<div class="el-col el-col-6"
 			     style="padding-left: 5px; padding-right: 5px;"
 			     v-for="wishlist in wishlists">
 				<div class="grid-content">
@@ -10,21 +10,55 @@
 						<div slot="header" class="clearfix">
 							<span>{{wishlist.name}}</span>
 						</div>
-						<div v-for="item in wishlist.items" :key="item.id" class="text item">
-							{{item.name}}
+						<!--<div  class="text item">-->
+							<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items" :key="item.id">
+								<el-collapse-item :title="item.name" :name="item.id">
+									<div v-if="item.description">{{item.description}}</div>
+									<div v-if="item.link">{{item.link}}</div>
+									<div v-if="item.price">{{item.price}}</div>
+								</el-collapse-item>
+							</el-collapse>
+						<!--</div>-->
+						<div class="bottom clearfix">
+							<el-button
+									type="text"
+									class="button"
+									@click="itemFormVisible=true; itemCreateForm.id = wishlist.id">
+								Add item
+							</el-button>
 						</div>
 					</el-card>
 				</div>
 			</div>
 		</el-row>
-		<el-dialog :title="'Wishlist: ' + form.name" :visible.sync="dialogFormVisible">
-			<el-form :model="form" ref="wishlistForm" :rules="formRules">
+		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name" :visible.sync="wishlistFormVisible">
+			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
-					<el-input v-model="form.name" auto-complete="off"></el-input>
+					<el-input v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="submitWishlist('wishlistForm')">Submit</el-button>
-					<el-button @click="dialogFormVisible = false">Cancel</el-button>
+					<el-button @click="wishlistFormVisible = false">Cancel</el-button>
+				</el-form-item>
+			</el-form>
+		</el-dialog>
+		<el-dialog :title="'Item: ' + itemCreateForm.name" :visible.sync="itemFormVisible">
+			<el-form :model="itemCreateForm" ref="itemCreateForm" :rules="formRules">
+				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
+					<el-input v-model="itemCreateForm.name" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
+					<el-input v-model="itemCreateForm.description" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
+					<el-input v-model="itemCreateForm.price" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
+					<el-input v-model="itemCreateForm.link" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="submitItem('itemCreateForm')">Submit</el-button>
+					<el-button @click="itemFormVisible = false">Cancel</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -53,14 +87,23 @@
 			};
 			return {
 				wishlists: [{name: "Blank", id: 0, items: []}],
+				activeItem: "",
 				userId: 0,
-				dialogFormVisible: false,
-				form: {
+				wishlistFormVisible: false,
+				itemFormVisible: false,
+				wishlistCreateForm: {
 					name: "",
+				},
+				itemCreateForm: {
+					id: "",
+					name: "",
+					description: "",
+					price: "",
+					link: ""
 				},
 				formRules: {
 					name: [
-						{required: true, message: 'Please input Wishlist name', trigger: 'blur'},
+						{required: true, message: 'Please input a name', trigger: 'blur'},
 						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
 					]
 				},
@@ -69,11 +112,9 @@
 		},
 		methods: {
 			loadWishLists(userId) {
-//				console.log(Object.keys(userId).length !== 0);
 				if (Object.keys(userId).length !== 0)
 					api.request("GET", "http://10.241.1.87:8080/user/" + userId + "/wishlist", {}, this.setWishLists, this.errorHandle, this.$store.state.token)
 				else if (this.$store.state.user.id) {
-					console.log(this.$store.state.user.id);
 					api.request("GET", "http://10.241.1.87:8080/user/" + this.$store.state.user.id + "/wishlist", {}, this.setWishLists, this.errorHandle, this.$store.state.token)
 				}
 			},
@@ -95,8 +136,8 @@
 			submitWishlist(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.dialogFormVisible = false;
-						let wishlist = {name: this.form.name};
+						this.wishlistFormVisible = false;
+						let wishlist = {name: this.wishlistCreateForm.name};
 						let userId = this.$store.state.user.id;
 						api.request("POST", "http://10.241.1.87:8080/user/" + userId + "/wishlist", wishlist, this.loadWishLists, this.errorHandle, this.$store.state.token)
 					} else {
@@ -104,6 +145,27 @@
 					}
 				});
 
+			},
+			submitItem(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						this.itemFormVisible = false;
+						let item = {
+							name: this.itemCreateForm.name,
+							description: this.itemCreateForm.description,
+							link: this.itemCreateForm.link,
+							price: this.itemCreateForm.price
+						};
+						let userId = this.$store.state.user.id;
+						api.request("POST", "http://10.241.1.87:8080/user/" + userId + "/wishlist/" + this.itemCreateForm.id + "/item",
+							item,
+							this.loadWishLists,
+							this.errorHandle,
+							this.$store.state.token)
+					} else {
+						return false;
+					}
+				});
 			}
 		},
 		mounted: function () {
