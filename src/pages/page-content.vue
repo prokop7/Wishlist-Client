@@ -71,10 +71,10 @@
 			loadWishLists(userId) {
 //				console.log(Object.keys(userId).length !== 0);
 				if (Object.keys(userId).length !== 0)
-					api.request("GET", "http://localhost:8080/user/" + userId + "/wishlist", {}, this.setWishLists, this.errorHandle, this.$store.state.token)
+					api.request("GET", "http://10.241.1.87:8080/user/" + userId + "/wishlist", {}, this.setWishLists, this.errorHandle, this.$store.state.token)
 				else if (this.$store.state.user.id) {
 					console.log(this.$store.state.user.id);
-					api.request("GET", "http://localhost:8080/user/" + this.$store.state.user.id + "/wishlist", {}, this.setWishLists, this.errorHandle, this.$store.state.token)
+					api.request("GET", "http://10.241.1.87:8080/user/" + this.$store.state.user.id + "/wishlist", {}, this.setWishLists, this.errorHandle, this.$store.state.token)
 				}
 			},
 			setWishLists(result) {
@@ -98,7 +98,7 @@
 						this.dialogFormVisible = false;
 						let wishlist = {name: this.form.name};
 						let userId = this.$store.state.user.id;
-						api.request("POST", "http://localhost:8080/user/" + userId + "/wishlist", wishlist, this.loadWishLists, this.errorHandle, this.$store.state.token)
+						api.request("POST", "http://10.241.1.87:8080/user/" + userId + "/wishlist", wishlist, this.loadWishLists, this.errorHandle, this.$store.state.token)
 					} else {
 						return false;
 					}
