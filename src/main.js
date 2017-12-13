@@ -4,20 +4,25 @@ import App from './app.vue'
 import Vuex from 'vuex'
 
 import ElementUI from 'element-ui'
+import {Select, Option} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Vuex)
 Vue.use(ElementUI)
 
+Vue.component(Select.name, Select)
+Vue.component(Option.name, Option)
+
 const store = new Vuex.Store({
 	state: {
 		count: 0,
 		user: {
+			id: 0,
 			name: "",
 			photoLink: "",
 			wishlists: [{name: "Blank", id: 0, items: []}],
-			friends: [{name: "Default name", id: -1}]
 		},
+		friends: [{name: "Default name", id: -1}],
 		token: ""
 	},
 	getters: {
@@ -27,8 +32,11 @@ const store = new Vuex.Store({
 		wishlists(state) {
 			return state.user.wishlists
 		},
+		token(state) {
+			return state.token
+		},
 		friends(state) {
-			return state.user.friends
+			return state.friends
 		},
 		wishlistsCount(state, getters) {
 			return getters.wishlists.length
@@ -43,6 +51,9 @@ const store = new Vuex.Store({
 		},
 		token(state, value) {
 			state.token = value
+		},
+		friends(state, friends) {
+			state.friends = friends
 		}
 	}
 });

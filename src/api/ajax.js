@@ -9,7 +9,7 @@ export function request(type, url, data, successCallback, errorCallback, token) 
 	}
 	xhr.onload = function () {
 		if (xhr.status >= 200 && xhr.status < 400) {
-			console.log(xhr)
+			console.log({type: type, url: xhr.responseURL, response:xhr.response})
 			if (xhr.response) {
 				// console.log(xhr.status);
 				var result;
