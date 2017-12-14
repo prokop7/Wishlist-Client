@@ -24,7 +24,6 @@ export function request(type, url, data, successCallback, errorCallback, token) 
 			} else {
 				if (successCallback)
 					successCallback({});
-				;
 			}
 		}
 		else {

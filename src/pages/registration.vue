@@ -22,8 +22,10 @@
 				localStorage.removeItem('token')
 			} else if (localStorage.getItem('token')) {
 				this.state = "Wait";
-				this.$store.commit('token', localStorage.getItem('token'));
-				this.loadUser(this.$store.state.token);
+				let token = localStorage.getItem('token')
+				this.$store.commit('token', token);
+				Ajax.setToken(token);
+				this.loadUser(jwtDecode(token).sub);
 			}
 			else
 				this.register()
@@ -31,7 +33,7 @@
 		methods: {
 			register: function () {
 				if (this.code) {
-					Ajax.request("GET", "http://10.241.1.87:8080/registration?code=" + this.code, {}, this.setToken, this.error)
+					Ajax.registerWithCode(this.code, this.setToken, this.error)
 				}
 				console.log("EMPTY")
 			},
@@ -42,12 +44,12 @@
 				let token = d['accessToken'];
 				localStorage.setItem('token', token);
 				this.$store.commit('token', token);
-				this.loadUser(token)
+				Ajax.setToken(token);
+				this.loadUser(jwtDecode(token).sub)
 			},
-			loadUser: function (token) {
-				let userId = jwtDecode(token).sub;
-				Ajax.request("GET", "http://10.241.1.87:8080/user/" + userId, {}, this.setUser, this.error, token);
-				Ajax.request("GET", "http://10.241.1.87:8080/user/" + userId + "/all_friends", {}, this.setUserFriends, this.error, this.$store.state.token);
+			loadUser: function (userId) {
+				Ajax.getUser(userId, this.setUser, this.error);
+				Ajax.getUserFriends(userId, this.setUserFriends, this.error);
 			},
 			setUser: function (result) {
 				this.$store.commit('setUser', result);
