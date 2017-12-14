@@ -4,11 +4,19 @@
 			<div slot="header" class="clearfix">
 				<span>{{wishlist.name}}</span>
 			</div>
-			<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items" :key="item.id">
+			<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items"
+			             :key="item.id">
 				<el-collapse-item :title="item.name" :name="item.id">
-					<div v-if="item.description">{{item.description}}</div>
-					<div v-if="item.link">{{item.link}}</div>
-					<div v-if="item.price">{{item.price}}</div>
+					<el-table :data="getItem(item)"
+					          :showHeader="false"
+					          emptyText="">
+						<el-table-column
+								prop="key">
+						</el-table-column>
+						<el-table-column
+								prop="value">
+						</el-table-column>
+					</el-table>
 				</el-collapse-item>
 			</el-collapse>
 			<div class="bottom clearfix">
@@ -46,6 +54,7 @@
 	import Ajax from '@/api'
 
 	export default {
+		components: {},
 		data: function () {
 			return {
 				activeItem: "",
@@ -86,6 +95,15 @@
 						return false;
 					}
 				});
+			},
+			getItem(item) {
+				let keys = Object.keys(item);
+				let itemView = [];
+				keys.forEach(key => {
+					if (item[key] && key !== 'id' && key !== 'name')
+						itemView.push({key: key, value: item[key]})
+				});
+				return itemView;
 			}
 		},
 		mounted: function () {

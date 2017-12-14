@@ -26,7 +26,8 @@
 				           filterable
 				           placeholder="Friends"
 				           @change="selectChange"
-				           noDataText="No registered friends">
+				           noDataText="No registered friends"
+				           noMatchText="Not found">
 					<el-option-group label="Registered">
 						<el-option
 								v-for="friend in $store.getters.friends"

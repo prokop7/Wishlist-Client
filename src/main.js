@@ -4,14 +4,15 @@ import App from './app.vue'
 import Vuex from 'vuex'
 
 import ElementUI from 'element-ui'
-import {Select, Option} from 'element-ui'
+import {Select, Option, Table} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-Vue.use(Vuex)
-Vue.use(ElementUI)
+Vue.use(Vuex);
+Vue.use(ElementUI);
 
-Vue.component(Select.name, Select)
-Vue.component(Option.name, Option)
+Vue.component(Select.name, Select);
+Vue.component(Option.name, Option);
+Vue.component(Table.name, Table);
 
 const store = new Vuex.Store({
 	state: {
@@ -67,5 +68,5 @@ export const mainVue = new Vue({
 	},
 	router,
 	store
-}).$mount("#app")
+}).$mount("#app");
 

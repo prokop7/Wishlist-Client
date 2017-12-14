@@ -14,15 +14,15 @@
 			}
 		},
 		mounted: function () {
-			this.code = this.$route.query["code"]
+			this.code = this.$route.query["code"];
 			if (this.$route.query["logout"]) {
-				this.state = "You need a registration"
+				this.state = "You need a registration";
 				this.$store.commit('token', "");
 				this.$store.commit('setUser', {});
 				localStorage.removeItem('token')
 			} else if (localStorage.getItem('token')) {
 				this.state = "Wait";
-				let token = localStorage.getItem('token')
+				let token = localStorage.getItem('token');
 				this.$store.commit('token', token);
 				Ajax.setToken(token);
 				this.loadUser(jwtDecode(token).sub);
