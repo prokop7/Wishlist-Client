@@ -4,21 +4,26 @@
 			<div slot="header" class="clearfix">
 				<span>{{wishlist.name}}</span>
 			</div>
-			<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items"
-			             :key="item.id">
-				<el-collapse-item :title="item.name" :name="item.id">
-					<el-table :data="getItem(item)"
-					          :showHeader="false"
-					          emptyText="No description">
-						<el-table-column
-								prop="key">
-						</el-table-column>
-						<el-table-column
-								prop="value">
-						</el-table-column>
-					</el-table>
-				</el-collapse-item>
-			</el-collapse>
+			<div class="item"
+			     v-for="item in wishlist.items"
+			     :key="item.id">
+				{{item.name}}
+			</div>
+			<!--<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items"-->
+			             <!--:key="item.id">-->
+				<!--<el-collapse-item :title="item.name" :name="item.id">-->
+					<!--<el-table :data="getItem(item)"-->
+					          <!--:showHeader="false"-->
+					          <!--emptyText="No description">-->
+						<!--&lt;!&ndash;<el-table-column&ndash;&gt;-->
+								<!--&lt;!&ndash;prop="key">&ndash;&gt;-->
+						<!--&lt;!&ndash;</el-table-column>&ndash;&gt;-->
+						<!--<el-table-column-->
+								<!--prop="value">-->
+						<!--</el-table-column>-->
+					<!--</el-table>-->
+				<!--</el-collapse-item>-->
+			<!--</el-collapse>-->
 			<div class="bottom clearfix" v-if="canAdd">
 				<el-button
 						type="text"
@@ -112,3 +117,34 @@
 	}
 
 </script>
+
+<style lang="scss">
+	.item {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		background-color: #FFFFFF;
+		color: #4d4d4d;
+		border-radius: 3px;
+		border: none;
+		outline: none;
+		opacity: 1;
+		width: 90%;
+		padding: 3% 4%;
+		min-height: 17px;
+		margin: 0 auto 7px auto;
+		cursor: pointer;
+		/*font-family: 'Open Sans', sans-serif;*/
+		font-weight: 400;
+		font-size: 12px;
+	}
+
+	.el-card__body {
+		padding: 0 10px;
+	}
+
+	.box-card {
+		width: 100%;
+		background-color: #d9dee3;
+	}
+</style>

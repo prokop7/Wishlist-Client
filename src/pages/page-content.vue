@@ -1,9 +1,7 @@
 <template>
-	<div id="page-content">
-		<el-button v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
-		<el-row :gutter="10">
-			<div class="el-col el-col-6"
-			     style="padding-left: 5px; padding-right: 5px;"
+	<div id="page-content" style="white-space: nowrap">
+		<!--<el-row :gutter="10" >-->
+			<div class="column"
 			     v-for="wishlist in wishlists">
 				<div class="grid-content">
 					<wishlist
@@ -13,7 +11,8 @@
 					</wishlist>
 				</div>
 			</div>
-		</el-row>
+		<!--</el-row>-->
+		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
 		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name" :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
@@ -63,7 +62,16 @@
 						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
 					]
 				},
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				stages: ['on-hold', 'in-progress', 'needs-review', 'approved'],
+				blocks: [
+					{
+						id: 10,
+						status: 'Wishlist 1',
+						title: 'Test',
+					},
+				],
+				wishlistNames: ['on-hold', 'in-progress', 'needs-review', 'approved']
 			};
 		},
 		methods: {
@@ -77,6 +85,7 @@
 			setWishlists(result) {
 				this.wishlists = result;
 				this.resize();
+				this.setWishlistNames();
 			},
 			resize() {
 				let count = this.wishlists.length;
@@ -104,6 +113,10 @@
 			},
 			isUser() {
 				return this.$route.params['userId'] == this.$store.state.user.id;
+			},
+			setWishlistNames() {
+				this.wishlistNames = [];
+				this.wishlists.forEach(w => this.wishlistNames.push(w.name));
 			}
 		},
 		mounted: function () {
@@ -123,12 +136,12 @@
 </script>
 
 <style lang="scss">
-	.text {
-		font-size: 14px;
+	#page-content {
+		text-align: left;
 	}
 
-	.item {
-		margin-bottom: 18px;
+	.text {
+		font-size: 14px;
 	}
 
 	.clearfix:before,
@@ -141,18 +154,18 @@
 		clear: both
 	}
 
-	.box-card {
-		width: 100%;
-	}
 
-	.el-row {
-		margin-bottom: 20px;
-		&:last-child {
-			margin-bottom: 0;
-		}
-	}
-
-	.el-col {
+	.column {
 		border-radius: 4px;
+		padding-left: 5px;
+		padding-right: 5px;
+		width: 350px;
+		display: inline-block;
+		vertical-align: top;
+		/*float: left;*/
+	}
+
+	#create-wishlist {
+		display: inline-block;
 	}
 </style>
