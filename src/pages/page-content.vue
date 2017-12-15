@@ -1,6 +1,6 @@
 <template>
 	<div id="page-content">
-		<el-button type="text" @click="wishlistFormVisible = true">Create wishlist</el-button>
+		<el-button v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
 		<el-row :gutter="10">
 			<div class="el-col el-col-6"
 			     style="padding-left: 5px; padding-right: 5px;"
@@ -8,6 +8,7 @@
 				<div class="grid-content">
 					<wishlist
 							@loadWishlists="loadWishlists"
+							:canAdd="isUser()"
 							:wishlist="wishlist">
 					</wishlist>
 				</div>
@@ -101,19 +102,20 @@
 				});
 
 			},
+			isUser() {
+				return this.$route.params['userId'] == this.$store.state.user.id;
+			}
 		},
 		mounted: function () {
 			if (!this.$store.state.token)
 				this.$router.push('/registration/');
 			else {
-				console.log("push")
 				Ajax.setToken(this.$store.state.token);
 				this.loadWishlists(this.$store.state.user.id);
 			}
 		},
 		watch: {
 			'$route'(to, from) {
-				console.log("watch")
 				this.loadWishlists(to.params['userId']);
 			}
 		}

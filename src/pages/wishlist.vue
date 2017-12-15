@@ -9,7 +9,7 @@
 				<el-collapse-item :title="item.name" :name="item.id">
 					<el-table :data="getItem(item)"
 					          :showHeader="false"
-					          emptyText="">
+					          emptyText="No description">
 						<el-table-column
 								prop="key">
 						</el-table-column>
@@ -19,7 +19,7 @@
 					</el-table>
 				</el-collapse-item>
 			</el-collapse>
-			<div class="bottom clearfix">
+			<div class="bottom clearfix" v-if="canAdd">
 				<el-button
 						type="text"
 						class="button"
@@ -75,7 +75,8 @@
 			}
 		},
 		props: {
-			wishlist: {name: "", id: 0, items: []}
+			wishlist: {name: "", id: 0, items: []},
+			canAdd: false
 		},
 		methods: {
 			submitItem(formName) {
