@@ -29,6 +29,9 @@ function getUserFriends(userId, successCallback, errorCallback) {
 function addItem(userId, wishlistId, item, successCallback, errorCallback) {
 	request("POST", `${serverUri}/user/${userId}/wishlist/${wishlistId}/item`, item, successCallback, errorCallback, apiToken)
 }
+function editItem(userId, wishlistId, itemId, item, successCallback, errorCallback) {
+	request("PUT", `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/${itemId}`, item, successCallback, errorCallback, apiToken)
+}
 
 export default {
 	setToken,
@@ -37,5 +40,6 @@ export default {
 	registerWithCode,
 	getUser,
 	getUserFriends,
-	addItem
+	addItem,
+	editItem
 }
