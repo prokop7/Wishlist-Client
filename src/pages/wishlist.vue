@@ -7,22 +7,22 @@
 			<div class="item"
 			     v-for="item in wishlist.items"
 			     :key="item.id">
-				{{item.name}}
+				<el-button @click="displayItem(item);" type="text">{{item.name}}</el-button>
 			</div>
 			<!--<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items"-->
-			             <!--:key="item.id">-->
-				<!--<el-collapse-item :title="item.name" :name="item.id">-->
-					<!--<el-table :data="getItem(item)"-->
-					          <!--:showHeader="false"-->
-					          <!--emptyText="No description">-->
-						<!--&lt;!&ndash;<el-table-column&ndash;&gt;-->
-								<!--&lt;!&ndash;prop="key">&ndash;&gt;-->
-						<!--&lt;!&ndash;</el-table-column>&ndash;&gt;-->
-						<!--<el-table-column-->
-								<!--prop="value">-->
-						<!--</el-table-column>-->
-					<!--</el-table>-->
-				<!--</el-collapse-item>-->
+			<!--:key="item.id">-->
+			<!--<el-collapse-item :title="item.name" :name="item.id">-->
+			<!--<el-table :data="getItem(item)"-->
+			<!--:showHeader="false"-->
+			<!--emptyText="No description">-->
+			<!--&lt;!&ndash;<el-table-column&ndash;&gt;-->
+			<!--&lt;!&ndash;prop="key">&ndash;&gt;-->
+			<!--&lt;!&ndash;</el-table-column>&ndash;&gt;-->
+			<!--<el-table-column-->
+			<!--prop="value">-->
+			<!--</el-table-column>-->
+			<!--</el-table>-->
+			<!--</el-collapse-item>-->
 			<!--</el-collapse>-->
 			<div class="bottom clearfix" v-if="canAdd">
 				<el-button
@@ -33,6 +33,31 @@
 				</el-button>
 			</div>
 		</el-card>
+		<el-dialog
+				title="Edit"
+				:visible.sync="itemVisible"
+				width="50%"
+				center
+				v-if="itemVisibleObject">
+			<el-form :model="itemVisibleObject" :ref="'itemEditForm-' + wishlist.id" :rules="formRules">
+				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
+					<el-input v-model="itemVisibleObject.name" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
+					<el-input v-model="itemVisibleObject.description" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
+					<el-input v-model="itemVisibleObject.price" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
+					<el-input v-model="itemVisibleObject.link" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="editItem('itemEditForm-' + wishlist.id)">Submit</el-button>
+					<el-button @click="itemVisible=false">Cancel</el-button>
+				</el-form-item>
+			</el-form>
+		</el-dialog>
 		<el-dialog :title="'Item: ' + itemCreateForm.name" :visible.sync="itemFormVisible">
 			<el-form :model="itemCreateForm" :ref="'itemCreateForm-' + wishlist.id" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
@@ -48,7 +73,7 @@
 					<el-input v-model="itemCreateForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="submitItem('itemCreateForm-' + wishlist.id)">Submit</el-button>
+					<el-button type="primary" @click="createItem('itemCreateForm-' + wishlist.id)">Submit</el-button>
 					<el-button @click="itemFormVisible = false">Cancel</el-button>
 				</el-form-item>
 			</el-form>
@@ -57,9 +82,10 @@
 </template>
 <script>
 	import Ajax from '@/api'
+	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 
 	export default {
-		components: {},
+		components: {ElButton},
 		data: function () {
 			return {
 				activeItem: "",
@@ -76,7 +102,15 @@
 						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
 					]
 				},
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				itemVisible: false,
+				itemVisibleObject: {
+					id: "",
+					name: "",
+					description: "",
+					price: "",
+					link: ""
+				}
 			}
 		},
 		props: {
@@ -84,7 +118,7 @@
 			canAdd: false
 		},
 		methods: {
-			submitItem(formName) {
+			createItem(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
 						this.itemFormVisible = false;
@@ -102,7 +136,28 @@
 					}
 				});
 			},
+			editItem(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						this.itemVisible = false;
+						let _this = this;
+						Ajax.editItem(
+							this.$store.state.user.id,
+							this.wishlist.id,
+							this.itemVisibleObject.id,
+							this.itemVisibleObject,
+							function (data) {
+								_this.$emit('loadWishlists', data)
+							},
+							this.errorHandle);
+					} else {
+						return false;
+					}
+				});
+			},
 			getItem(item) {
+				if (!item)
+					return [];
 				let keys = Object.keys(item);
 				let itemView = [];
 				keys.forEach(key => {
@@ -110,6 +165,10 @@
 						itemView.push({key: key, value: item[key]})
 				});
 				return itemView;
+			},
+			displayItem(item) {
+				this.itemVisibleObject = item;
+				this.itemVisible = true;
 			}
 		},
 		mounted: function () {
