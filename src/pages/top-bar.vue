@@ -11,7 +11,7 @@
 			<el-menu-item index="photo"
 			              v-if="isSigned()"
 			              :route="/user/ + $store.state.user.id">
-				<img :src="$store.state.user.photoLink" style="height: 50px; padding-bottom: 5px" alt="">
+				<img :src="$store.state.user.photoLink" style="height: 50px; border-radius: 50%" alt="">
 			</el-menu-item>
 			<el-menu-item index="user"
 			              v-if="isSigned()"
@@ -104,5 +104,9 @@
 	.el-menu--horizontal .el-submenu > .el-menu {
 		overflow-y: scroll;
 		height: 500px;
+	}
+	#login-link {
+		float: right;
+		padding-right: 20px;
 	}
 </style>

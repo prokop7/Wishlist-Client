@@ -219,7 +219,7 @@
 	.el-card__body {
 		padding: 0 10px;
 		overflow-y: auto;
-		height: 70vh;
+		max-height: 70vh;
 	}
 
 	.box-card {
