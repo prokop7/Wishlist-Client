@@ -5,26 +5,14 @@
 				<span>{{wishlist.name}}</span>
 			</div>
 			<div class="item"
+			     :id="'item-' + wishlist.id + '-' + item.id"
 			     v-for="item in wishlist.items"
 			     :key="item.id">
 				<el-button @click="displayItem(item);" type="text">{{item.name}}</el-button>
+				<el-checkbox v-if="!isMine" @change="itemTaken(item, wishlist.id)"
+				             style="float: right;margin-top: 10px"></el-checkbox>
 			</div>
-			<!--<el-collapse v-model="activeItem" accordion v-for="item in wishlist.items"-->
-			<!--:key="item.id">-->
-			<!--<el-collapse-item :title="item.name" :name="item.id">-->
-			<!--<el-table :data="getItem(item)"-->
-			<!--:showHeader="false"-->
-			<!--emptyText="No description">-->
-			<!--&lt;!&ndash;<el-table-column&ndash;&gt;-->
-			<!--&lt;!&ndash;prop="key">&ndash;&gt;-->
-			<!--&lt;!&ndash;</el-table-column>&ndash;&gt;-->
-			<!--<el-table-column-->
-			<!--prop="value">-->
-			<!--</el-table-column>-->
-			<!--</el-table>-->
-			<!--</el-collapse-item>-->
-			<!--</el-collapse>-->
-			<div class="bottom clearfix" v-if="canAdd">
+			<div class="bottom clearfix" v-if="isMine">
 				<el-button
 						type="text"
 						class="button"
@@ -86,6 +74,10 @@
 
 	export default {
 		components: {ElButton},
+		props: {
+			wishlist: {name: "", id: 0, items: []},
+			isMine: false
+		},
 		data: function () {
 			return {
 				activeItem: "",
@@ -110,12 +102,9 @@
 					description: "",
 					price: "",
 					link: ""
-				}
+				},
+				itemTakenObjects: {}
 			}
-		},
-		props: {
-			wishlist: {name: "", id: 0, items: []},
-			canAdd: false
 		},
 		methods: {
 			createItem(formName) {
@@ -167,8 +156,20 @@
 				return itemView;
 			},
 			displayItem(item) {
-				this.itemVisibleObject = item;
-				this.itemVisible = true;
+				if (this.isMine) {
+					this.itemVisibleObject = item;
+					this.itemVisible = true;
+				}
+
+			},
+			itemTaken(item, wishlistId) {
+				console.log("TAKING ITEM")
+				//TODO make real request to server.
+				let id = `item-${wishlistId}-${item.id}`;
+				this.itemTakenObjects[id] = !this.itemTakenObjects[id];
+				let el = document.getElementById(id);
+				el.style.backgroundColor = this.itemTakenObjects[id] ? '#c4c5d1' : '#ffffff'
+
 			}
 		},
 		mounted: function () {
@@ -179,7 +180,7 @@
 
 <style lang="scss">
 	.item {
-		display: flex;
+		/*display: flex;*/
 		justify-content: flex-start;
 		align-items: flex-start;
 		background-color: #FFFFFF;

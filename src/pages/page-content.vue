@@ -6,7 +6,7 @@
 				<div class="grid-content">
 					<wishlist
 							@loadWishlists="loadWishlists"
-							:canAdd="isUser()"
+							:isMine="isUser()"
 							:wishlist="wishlist">
 					</wishlist>
 				</div>
