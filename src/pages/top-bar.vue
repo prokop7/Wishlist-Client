@@ -63,8 +63,9 @@
 </template>
 <script>
 	import ElOptionGroup from "../../node_modules/element-ui/packages/select/src/option-group.vue";
+	import {redirectUri} from "@/config"
 
-	const loginUri = "https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=http://10.241.1.87:8081/registration";
+	const loginUri = `https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=${redirectUri}`;
 
 	export default {
 		data: function () {

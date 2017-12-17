@@ -1,6 +1,6 @@
 import {request} from './ajax'
+import {serverUri} from '@/config'
 let apiToken = "";
-const serverUri = 'http://10.241.1.87:8080';
 
 function setToken(token) {
 	apiToken = token;

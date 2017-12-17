@@ -34,7 +34,7 @@
 			register: function () {
 				if (this.code) {
 					Ajax.registerWithCode(this.code, this.setToken, this.error)
-				}
+				} else
 				console.log("EMPTY")
 			},
 			error: function () {

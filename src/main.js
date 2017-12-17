@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 
 import ElementUI from 'element-ui'
 import {Select, Option, Table} from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Vuex);
 Vue.use(ElementUI);
