@@ -123,6 +123,7 @@
 								_this.$emit('loadWishlists', data)
 							},
 							this.errorHandle);
+						this.itemCreateForm = {}
 					} else {
 						return false;
 					}

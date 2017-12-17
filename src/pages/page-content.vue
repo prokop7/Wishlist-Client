@@ -13,13 +13,21 @@
 		</div>
 		<!--</el-row>-->
 		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
-		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name" :visible.sync="wishlistFormVisible">
+		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name"
+		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
 					<el-input v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="Visibility" :label-width="formLabelWidth" prop="visibility">
+					<el-select v-model="wishlistCreateForm.visibility"
+					           placeholder="please select visibility">
+						<el-option label="Public" value=2></el-option>
+						<el-option label="Private" value=0></el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="submitWishlist('wishlistForm')">Submit</el-button>
+					<el-button type="primary" @click="createWishlist()">Submit</el-button>
 					<el-button @click="wishlistFormVisible = false">Cancel</el-button>
 				</el-form-item>
 			</el-form>
@@ -55,11 +63,15 @@
 				wishlistFormVisible: false,
 				wishlistCreateForm: {
 					name: "",
+					visibility: ""
 				},
 				formRules: {
 					name: [
 						{required: true, message: 'Please input a name', trigger: 'blur'},
 						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
+					],
+					visibility: [
+						{required: true, message: 'Please select visibility option', trigger: 'blur'}
 					]
 				},
 				formLabelWidth: '120px',
@@ -91,13 +103,17 @@
 				this.$router.push('/404');
 				console.log(e)
 			},
-			submitWishlist(formName) {
-				this.$refs[formName].validate((valid) => {
+			createWishlist() {
+				this.$refs['wishlistForm'].validate((valid) => {
 					if (valid) {
 						this.wishlistFormVisible = false;
-						let wishlist = {name: this.wishlistCreateForm.name};
+						let wishlist = {
+							name: this.wishlistCreateForm.name,
+							visibility: this.wishlistCreateForm.visibility
+						};
 						let userId = this.$store.state.user.id;
 						Ajax.addWishlist(userId, wishlist, this.loadWishlists, this.errorHandle)
+						this.wishlistCreateForm = {}
 					} else {
 						return false;
 					}
