@@ -8,7 +8,7 @@
 			     :id="'item-' + wishlist.id + '-' + item.id"
 			     v-for="item in wishlist.items"
 			     :key="item.id">
-				<el-button @click="displayItem(item);" type="text">{{item.name}}</el-button>
+				<el-button @click="displayItem(item);setListener();" type="text">{{item.name}}</el-button>
 				<el-checkbox v-if="!isMine" @change="itemTaken(item, wishlist.id)"
 				             style="float: right;margin-top: 10px"></el-checkbox>
 			</div>
@@ -16,40 +16,43 @@
 				<el-button
 						type="text"
 						class="button"
-						@click="itemFormVisible=true">
+						@click="itemCreateVisible=true;setListener();">
 					Add item
 				</el-button>
 			</div>
 		</el-card>
 		<el-dialog
-				title="Edit"
+				:title="isMine?'Edit':'View'"
 				:visible.sync="itemVisible"
 				width="50%"
 				center
 				v-if="itemVisibleObject">
-			<el-form :model="itemVisibleObject" :ref="'itemEditForm-' + wishlist.id" :rules="formRules">
+			<el-form :model="itemVisibleObject" :ref="'itemEditForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input v-model="itemVisibleObject.name" auto-complete="off"></el-input>
+					<el-input :disabled="!isMine" v-model="itemVisibleObject.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
-					<el-input v-model="itemVisibleObject.description" auto-complete="off"></el-input>
+					<el-input :disabled="!isMine" v-model="itemVisibleObject.description"
+					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
-					<el-input v-model="itemVisibleObject.price" auto-complete="off"></el-input>
+					<el-input :disabled="!isMine" v-model="itemVisibleObject.price" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
-					<el-input v-model="itemVisibleObject.link" auto-complete="off"></el-input>
+					<el-input :disabled="!isMine" v-model="itemVisibleObject.link" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="editItem('itemEditForm-' + wishlist.id)">Submit</el-button>
-					<el-button @click="itemVisible=false">Cancel</el-button>
+				<el-form-item v-if="isMine">
+					<el-button type="primary" @click="editItem();removeListener();" :autofocus="true">Save
+					</el-button>
+					<el-button @click="itemVisible=false;removeListener();">Cancel</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
-		<el-dialog :title="'Item: ' + itemCreateForm.name" :visible.sync="itemFormVisible">
-			<el-form :model="itemCreateForm" :ref="'itemCreateForm-' + wishlist.id" :rules="formRules">
+		<el-dialog :title="'Item: ' + itemCreateForm.name"
+		           :visible.sync="itemCreateVisible">
+			<el-form :model="itemCreateForm" :ref="'itemCreateForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input v-model="itemCreateForm.name" auto-complete="off"></el-input>
+					<el-input v-model="itemCreateForm.name" auto-complete="off" :autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
 					<el-input v-model="itemCreateForm.description" auto-complete="off"></el-input>
@@ -61,8 +64,8 @@
 					<el-input v-model="itemCreateForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="createItem('itemCreateForm-' + wishlist.id)">Submit</el-button>
-					<el-button @click="itemFormVisible = false">Cancel</el-button>
+					<el-button type="primary" @click="createItem();removeListener()">Save</el-button>
+					<el-button @click="itemCreateVisible = false;removeListener()">Cancel</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -81,7 +84,7 @@
 		data: function () {
 			return {
 				activeItem: "",
-				itemFormVisible: false,
+				itemCreateVisible: false,
 				itemCreateForm: {
 					name: "",
 					description: "",
@@ -107,10 +110,10 @@
 			}
 		},
 		methods: {
-			createItem(formName) {
-				this.$refs[formName].validate((valid) => {
+			createItem() {
+				this.$refs['itemCreateForm'].validate((valid) => {
 					if (valid) {
-						this.itemFormVisible = false;
+						this.itemCreateVisible = false;
 						let _this = this;
 						Ajax.addItem(
 							this.$store.state.user.id,
@@ -125,8 +128,8 @@
 					}
 				});
 			},
-			editItem(formName) {
-				this.$refs[formName].validate((valid) => {
+			editItem() {
+				this.$refs['itemEditForm'].validate((valid) => {
 					if (valid) {
 						this.itemVisible = false;
 						let _this = this;
@@ -156,23 +159,37 @@
 				return itemView;
 			},
 			displayItem(item) {
-				if (this.isMine) {
-					this.itemVisibleObject = item;
-					this.itemVisible = true;
-				}
-
+				this.itemVisibleObject = item;
+				this.itemVisible = true;
 			},
 			itemTaken(item, wishlistId) {
-				console.log("TAKING ITEM")
 				//TODO make real request to server.
 				let id = `item-${wishlistId}-${item.id}`;
+				console.log(this.itemTakenObjects[id] ? 'CANCEL TAKING' : "TAKING ITEM");
 				this.itemTakenObjects[id] = !this.itemTakenObjects[id];
 				let el = document.getElementById(id);
 				el.style.backgroundColor = this.itemTakenObjects[id] ? '#c4c5d1' : '#ffffff'
 
+			},
+			setListener() {
+				window.addEventListener('keyup', this.keyListener);
+			},
+			removeListener() {
+				window.removeEventListener('keyup', this.keyListener)
+			},
+			keyListener(event) {
+				if (event.keyCode===13)
+					if (this.itemVisible && this.isMine)
+						this.editItem();
+					else if (this.itemCreateVisible)
+						this.createItem();
 			}
 		},
 		mounted: function () {
+		},
+
+		beforeDestroy: function() {
+			this.removeListener()
 		}
 	}
 
@@ -201,6 +218,8 @@
 
 	.el-card__body {
 		padding: 0 10px;
+		overflow-y: auto;
+		height: 70vh;
 	}
 
 	.box-card {

@@ -19,11 +19,13 @@ export function request(type, url, data, successCallback, errorCallback, token) 
 				catch (e) {
 					result = xhr.response.result;
 				}
-				if (successCallback)
+				if (successCallback) {
 					successCallback(result);
+				}
 			} else {
-				if (successCallback)
+				if (successCallback) {
 					successCallback({});
+				}
 			}
 		}
 		else {

@@ -1,16 +1,16 @@
 <template>
 	<div id="page-content" style="white-space: nowrap">
 		<!--<el-row :gutter="10" >-->
-			<div class="column"
-			     v-for="wishlist in wishlists">
-				<div class="grid-content">
-					<wishlist
-							@loadWishlists="loadWishlists"
-							:isMine="isUser()"
-							:wishlist="wishlist">
-					</wishlist>
-				</div>
+		<div class="column"
+		     v-for="wishlist in wishlists">
+			<div class="grid-content">
+				<wishlist
+						@loadWishlists="loadWishlists"
+						:isMine="isUser()"
+						:wishlist="wishlist">
+				</wishlist>
 			</div>
+		</div>
 		<!--</el-row>-->
 		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
 		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name" :visible.sync="wishlistFormVisible">
@@ -76,23 +76,16 @@
 		},
 		methods: {
 			loadWishlists(userId) {
-				if (Object.keys(userId).length !== 0)
+				if (Object.keys(userId).length !== 0) {
 					Ajax.getWishlists(userId, this.setWishlists, this.errorHandle);
+				}
 				else if (this.$store.state.user.id) {
 					Ajax.getWishlists(this.$store.state.user.id, this.setWishlists, this.errorHandle)
 				}
 			},
 			setWishlists(result) {
 				this.wishlists = result;
-				this.resize();
 				this.setWishlistNames();
-			},
-			resize() {
-				let count = this.wishlists.length;
-				if (count > 6) {
-					document.getElementById('app').style.width = count / 6.0 * 100 + "%";
-				} else
-					document.getElementById('app').style.width = '100%';
 			},
 			errorHandle(e, eMessage) {
 				this.$router.push('/404');
@@ -120,8 +113,9 @@
 			}
 		},
 		mounted: function () {
-			if (!this.$store.state.token)
+			if (!this.$store.state.token) {
 				this.$router.push('/registration/');
+			}
 			else {
 				Ajax.setToken(this.$store.state.token);
 				this.loadWishlists(this.$store.state.user.id);
@@ -153,7 +147,6 @@
 	.clearfix:after {
 		clear: both
 	}
-
 
 	.column {
 		border-radius: 4px;
