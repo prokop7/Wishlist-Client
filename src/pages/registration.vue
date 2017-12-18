@@ -8,12 +8,12 @@
 	import jwtDecode from 'jwt-decode'
 
 	export default {
-		data: function () {
+		data() {
 			return {
 				state: "Registration"
 			}
 		},
-		mounted: function () {
+		mounted() {
 			this.code = this.$route.query["code"];
 			if (this.$route.query["logout"]) {
 				this.state = "You need a registration";
@@ -31,31 +31,31 @@
 				this.register()
 		},
 		methods: {
-			register: function () {
+			register() {
 				if (this.code) {
 					Ajax.registerWithCode(this.code, this.setToken, this.error)
 				} else
-				console.log("EMPTY")
+					console.log("EMPTY")
 			},
-			error: function () {
+			error() {
 				console.log("ERROR")
 			},
-			setToken: function (d) {
+			setToken(d) {
 				let token = d['accessToken'];
 				localStorage.setItem('token', token);
 				this.$store.commit('token', token);
 				Ajax.setToken(token);
 				this.loadUser(jwtDecode(token).sub)
 			},
-			loadUser: function (userId) {
+			loadUser(userId) {
 				Ajax.getUser(userId, this.setUser, this.error);
 				Ajax.getUserFriends(userId, this.setUserFriends, this.error);
 			},
-			setUser: function (result) {
+			setUser(result) {
 				this.$store.commit('setUser', result);
 				this.$router.push("/user/" + result.id)
 			},
-			setUserFriends: function (result) {
+			setUserFriends(result) {
 				this.$store.commit('friends', result);
 			}
 		}

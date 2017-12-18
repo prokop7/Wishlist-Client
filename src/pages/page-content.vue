@@ -58,6 +58,7 @@
 	import Ajax from "@/api"
 	import ElCol from "element-ui/packages/col/src/col";
 	import Wishlist from "./wishlist.vue"
+	import JwtDecode from 'jwt-decode'
 
 	export default {
 		components: {
@@ -128,15 +129,36 @@
 			setWishlistNames() {
 				this.wishlistNames = [];
 				this.wishlists.forEach(w => this.wishlistNames.push(w.name));
+			},
+			loadUser(userId) {
+				Ajax.getUser(userId, this.setUser, this.error);
+				Ajax.getUserFriends(userId, this.setUserFriends, this.error);
+			},
+			setUserFriends(result) {
+				this.$store.commit('friends', result);
+			},
+			setUser(result) {
+				this.$store.commit('setUser', result);
 			}
 		},
 		mounted: function () {
+			if (localStorage.getItem('token')) {
+				let token = localStorage.getItem('token');
+				Ajax.setToken(token);
+				this.$store.commit('token', token);
+				this.loadUser(JwtDecode(token).sub)
+			}
 			if (!this.$store.state.token) {
+				console.log('SEND TO REGISTRATION');
 				this.$router.push('/registration/');
 			}
 			else {
 				Ajax.setToken(this.$store.state.token);
-				this.loadWishlists(this.$store.state.user.id);
+				if (!this.$route.params['userId']) {
+					this.loadWishlists(this.$store.state.user.id);
+				} else {
+					this.loadWishlists(this.$route.params['userId']);
+				}
 			}
 		},
 		watch: {

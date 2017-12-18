@@ -32,7 +32,7 @@
 
 		data: function () {
 			return data;
-		},
+		}
 	}
 </script>
 
