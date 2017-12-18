@@ -179,7 +179,7 @@
 				window.removeEventListener('keyup', this.keyListener)
 			},
 			keyListener(event) {
-				if (event.keyCode===13)
+				if (event.keyCode === 13)
 					if (this.itemVisible && this.isMine)
 						this.editItem();
 					else if (this.itemCreateVisible)
@@ -189,7 +189,7 @@
 		mounted: function () {
 		},
 
-		beforeDestroy: function() {
+		beforeDestroy: function () {
 			this.removeListener()
 		}
 	}

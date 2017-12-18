@@ -26,6 +26,25 @@
 						<el-option label="Private" value=0></el-option>
 					</el-select>
 				</el-form-item>
+				<el-form-item label="Friend exclusion"
+				              :label-width="formLabelWidth"
+				              prop="friend-exclusion">
+					<el-select
+							v-model="wishlistCreateForm.friendExclusion"
+							multiple
+							:clearable="true"
+							placeholder="Select"
+							noDataText="No registered friends"
+							noMatchText="Not found">
+						<el-option
+								v-for="friend in this.$store.getters.friends"
+								v-if="friend.registered"
+								:key="friend.id"
+								:label="friend.name"
+								:value="friend.id">
+						</el-option>
+					</el-select>
+				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="createWishlist()">Submit</el-button>
 					<el-button @click="wishlistFormVisible = false">Cancel</el-button>
@@ -47,23 +66,14 @@
 			Wishlist
 		},
 		data: function () {
-			let validateName = (rule, value, callback) => {
-				if (value === '') {
-					callback(new Error('Please input the name'));
-				} else {
-					if (value.length < 3) {
-						callback(new Error('Name should be at least 3 symbol'));
-					}
-					callback();
-				}
-			};
 			return {
 				wishlists: [{name: "", id: 0, items: []}],
 				userId: 0,
 				wishlistFormVisible: false,
 				wishlistCreateForm: {
 					name: "",
-					visibility: ""
+					visibility: "",
+					friendExclusion: []
 				},
 				formRules: {
 					name: [
@@ -72,18 +82,10 @@
 					],
 					visibility: [
 						{required: true, message: 'Please select visibility option', trigger: 'blur'}
-					]
+					],
+					friendExclusion: []
 				},
 				formLabelWidth: '120px',
-				stages: ['on-hold', 'in-progress', 'needs-review', 'approved'],
-				blocks: [
-					{
-						id: 10,
-						status: 'Wishlist 1',
-						title: 'Test',
-					},
-				],
-				wishlistNames: ['on-hold', 'in-progress', 'needs-review', 'approved']
 			};
 		},
 		methods: {
@@ -99,7 +101,7 @@
 				this.wishlists = result;
 				this.setWishlistNames();
 			},
-			errorHandle(e, eMessage) {
+			errorHandle(e) {
 				this.$router.push('/404');
 				console.log(e)
 			},
@@ -107,13 +109,13 @@
 				this.$refs['wishlistForm'].validate((valid) => {
 					if (valid) {
 						this.wishlistFormVisible = false;
-						let wishlist = {
-							name: this.wishlistCreateForm.name,
-							visibility: this.wishlistCreateForm.visibility
-						};
 						let userId = this.$store.state.user.id;
-						Ajax.addWishlist(userId, wishlist, this.loadWishlists, this.errorHandle)
-						this.wishlistCreateForm = {}
+						Ajax.addWishlist(userId, this.wishlistCreateForm, this.loadWishlists, this.errorHandle);
+						this.wishlistCreateForm = {
+							name: "",
+							visibility: "",
+							friendExclusion: []
+						}
 					} else {
 						return false;
 					}
