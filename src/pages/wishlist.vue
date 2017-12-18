@@ -7,10 +7,22 @@
 			<div class="item"
 			     :id="'item-' + wishlist.id + '-' + item.id"
 			     v-for="item in wishlist.items"
-			     :key="item.id">
+			     :key="item.id" :style="'background-color:' + getItemColor(item)">
 				<el-button @click="displayItem(item);setListener();" type="text">{{item.name}}</el-button>
-				<el-checkbox v-if="!isMine" @change="itemTaken(item, wishlist.id)"
-				             style="float: right;margin-top: 10px"></el-checkbox>
+				<el-button v-if="!isMine&&(item.state!==2&&item.state!==1)"
+				           @click="takeItem(item, wishlist.id)"
+				           size="mini"
+				           :type="item.state === 0 ? 'primary' : 'danger'"
+				           style="float: right;margin-top: 7px">
+					{{item.state === 0 ? 'Take' : 'Cancel'}}
+				</el-button>
+				<el-button v-if="isMine&&item.state!==2"
+				           @click="acceptReceiving(item, wishlist.id)"
+				           type="success"
+				           size="mini"
+				           style="float: right;margin-top: 7px">
+					Accept
+				</el-button>
 			</div>
 			<div class="bottom clearfix" v-if="isMine">
 				<el-button
@@ -106,7 +118,7 @@
 					price: "",
 					link: ""
 				},
-				itemTakenObjects: {}
+				takeItemObjects: {}
 			}
 		},
 		methods: {
@@ -163,14 +175,38 @@
 				this.itemVisibleObject = item;
 				this.itemVisible = true;
 			},
-			itemTaken(item, wishlistId) {
-				//TODO make real request to server.
-				let id = `item-${wishlistId}-${item.id}`;
-				console.log(this.itemTakenObjects[id] ? 'CANCEL TAKING' : "TAKING ITEM");
-				this.itemTakenObjects[id] = !this.itemTakenObjects[id];
-				let el = document.getElementById(id);
-				el.style.backgroundColor = this.itemTakenObjects[id] ? '#c4c5d1' : '#ffffff'
-
+			takeItem(item, wishlistId) {
+				let userId = this.$route.params['userId'];
+				let newState = -1;
+				if (item.state === 0) {
+					newState = 3;
+				} else if (item.state === 3) {
+					newState = 0;
+				} else return;
+				Ajax.changeItemState(
+					userId,
+					wishlistId,
+					item.id,
+					1,
+					function () {
+						item.state = newState;
+					},
+					this.errorCallback)
+			},
+			acceptReceiving(item, wishlistId) {
+				let userId = this.$route.params['userId'];
+				Ajax.changeItemState(
+					userId,
+					wishlistId,
+					item.id,
+					2,
+					function () {
+						item.state = 2;
+					},
+					this.errorCallback)
+			},
+			errorCallback(e) {
+				console.log(e);
 			},
 			setListener() {
 				window.addEventListener('keyup', this.keyListener);
@@ -184,6 +220,18 @@
 						this.editItem();
 					else if (this.itemCreateVisible)
 						this.createItem();
+			},
+			getItemColor(item) {
+				if (item.state === 3)
+					return '#aab1d0';
+				else if (item.state === 2)
+					return '#c2c2c2';
+				else if (item.state === 1)
+					return '#bed0a6';
+				else if (item.state === 0)
+					return '#ffffff';
+				else
+					return '#000000'
 			}
 		},
 		mounted: function () {

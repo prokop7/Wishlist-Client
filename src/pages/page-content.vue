@@ -1,6 +1,5 @@
 <template>
 	<div id="page-content" style="white-space: nowrap">
-		<!--<el-row :gutter="10" >-->
 		<div class="column"
 		     v-for="wishlist in wishlists">
 			<div class="grid-content">
@@ -11,7 +10,6 @@
 				</wishlist>
 			</div>
 		</div>
-		<!--</el-row>-->
 		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
 		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name"
 		           :visible.sync="wishlistFormVisible">
@@ -111,7 +109,14 @@
 					if (valid) {
 						this.wishlistFormVisible = false;
 						let userId = this.$store.state.user.id;
-						Ajax.addWishlist(userId, this.wishlistCreateForm, this.loadWishlists, this.errorHandle);
+						let exclusions = [];
+						this.wishlistCreateForm.friendExclusion.forEach(exclusion => exclusions.push({id: exclusion}));
+						let wishlist = {
+							name: this.wishlistCreateForm.name,
+							visibility: this.wishlistCreateForm.visibility,
+							exclusions: exclusions
+						}
+						Ajax.addWishlist(userId, wishlist, this.loadWishlists, this.errorHandle);
 						this.wishlistCreateForm = {
 							name: "",
 							visibility: "",
@@ -121,7 +126,6 @@
 						return false;
 					}
 				});
-
 			},
 			isUser() {
 				return this.$route.params['userId'] == this.$store.state.user.id;
