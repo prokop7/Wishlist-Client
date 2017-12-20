@@ -4,33 +4,37 @@
 			<div slot="header" class="clearfix">
 				<span>{{wishlist.name}}</span>
 			</div>
-			<div class="item"
-			     :id="'item-' + wishlist.id + '-' + item.id"
-			     v-for="item in wishlist.items"
-			     :key="item.id" :style="'background-color:' + getItemColor(item)">
-				<el-button @click="displayItem(item);setListener();" type="text">{{item.name}}</el-button>
-				<el-button v-if="!isMine&&(item.state!==2&&item.state!==1)"
-				           @click="takeItem(item, wishlist.id)"
-				           size="mini"
-				           :type="item.state === 0 ? 'primary' : 'danger'"
-				           style="float: right;margin-top: 7px">
-					{{item.state === 0 ? 'Take' : 'Cancel'}}
-				</el-button>
-				<el-button v-if="isMine&&item.state!==2"
-				           @click="acceptReceiving(item, wishlist.id)"
-				           type="success"
-				           size="mini"
-				           style="float: right;margin-top: 7px">
-					Accept
-				</el-button>
+			<div class="items-body">
+				<div class="item"
+				     :id="'item-' + wishlist.id + '-' + item.id"
+				     v-for="item in wishlist.items"
+				     :key="item.id" :style="'background-color:' + getItemColor(item)">
+					<el-button @click="displayItem(item);setListener();" type="text">{{item.name}}</el-button>
+					<el-button v-if="!isMine&&(item.state!==2&&item.state!==1)"
+					           @click="takeItem(item, wishlist.id)"
+					           size="mini"
+					           :type="item.state === 0 ? 'primary' : 'danger'"
+					           style="float: right;margin-top: 7px">
+						{{item.state === 0 ? 'Take' : 'Cancel'}}
+					</el-button>
+					<el-button v-if="isMine&&item.state!==2"
+					           @click="acceptReceiving(item, wishlist.id)"
+					           type="success"
+					           size="mini"
+					           style="float: right;margin-top: 7px">
+						Accept
+					</el-button>
+				</div>
 			</div>
-			<div class="bottom clearfix" v-if="isMine">
-				<el-button
-						type="text"
-						class="button"
-						@click="itemCreateVisible=true;setListener();">
-					Add item
-				</el-button>
+			<div class="card-footer">
+				<div class="bottom clearfix" v-if="isMine">
+					<el-button
+							type="text"
+							class="button"
+							@click="itemCreateVisible=true;setListener();">
+						Add item
+					</el-button>
+				</div>
 			</div>
 		</el-card>
 		<el-dialog
@@ -255,8 +259,8 @@
 		border: #ffffff;
 		outline: none;
 		opacity: 1;
-		width: 90%;
-		padding: 3% 4%;
+		width: 95%;
+		padding: 1% 3%;
 		min-height: 17px;
 		margin: 0 auto 7px auto;
 		cursor: pointer;
@@ -267,8 +271,19 @@
 
 	.el-card__body {
 		padding: 0 10px;
-		overflow-y: auto;
+	}
+
+	.items-body {
+		overflow-y: scroll;
+		overflow-x: hidden;
 		max-height: 70vh;
+	}
+
+	.el-card__header {
+		padding-top: 8px;
+		padding-bottom: 8px;
+		padding-left: 16px;
+
 	}
 
 	.box-card {

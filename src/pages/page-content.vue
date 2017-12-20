@@ -196,7 +196,7 @@
 		border-radius: 4px;
 		padding-left: 5px;
 		padding-right: 5px;
-		width: 350px;
+		width: 270px;
 		display: inline-block;
 		vertical-align: top;
 		/*float: left;*/
