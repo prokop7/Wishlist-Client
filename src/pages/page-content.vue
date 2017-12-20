@@ -115,7 +115,7 @@
 							name: this.wishlistCreateForm.name,
 							visibility: this.wishlistCreateForm.visibility,
 							exclusions: exclusions
-						}
+						};
 						Ajax.addWishlist(userId, wishlist, this.loadWishlists, this.errorHandle);
 						this.wishlistCreateForm = {
 							name: "",

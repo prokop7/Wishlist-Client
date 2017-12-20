@@ -37,6 +37,10 @@ function changeItemState(userId, wishlistId, itemId, state, successCallback, err
 	request("POST", `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/${itemId}/state`, state, successCallback, errorCallback, apiToken)
 }
 
+function editWishlist(userId, wishlistId, wishlist, successCallback, errorCallback) {
+	request("PUT", `${serverUri}/user/${userId}/wishlist/${wishlistId}`, wishlist, successCallback, errorCallback, apiToken)
+}
+
 export default {
 	setToken,
 	getWishlists,
@@ -46,5 +50,6 @@ export default {
 	getUserFriends,
 	addItem,
 	editItem,
-	changeItemState
+	changeItemState,
+	editWishlist
 }
