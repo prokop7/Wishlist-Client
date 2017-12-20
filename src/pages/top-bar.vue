@@ -5,9 +5,11 @@
 				mode="horizontal"
 				menuTrigger="click"
 				@select="selectedMenu"
-				background-color="#545c64"
-				text-color="#fff"
-				active-text-color="#ffd04b">
+				background-color="#00000030"
+				transparency="0.15"
+				text-color="#FFF"
+				active-text-color="#FFFFFF"
+		>
 			<el-menu-item index="photo"
 			              v-if="isSigned()"
 			              :route="/user/ + $store.state.user.id">
@@ -49,7 +51,6 @@
 						>
 						</el-option>
 					</el-option-group>
-
 				</el-select>
 			</el-menu-item>
 			<el-menu-item

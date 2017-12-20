@@ -4,15 +4,38 @@ import App from './app.vue'
 import Vuex from 'vuex'
 
 import ElementUI from 'element-ui'
-import {Select, Option, Table} from 'element-ui'
+import {Select, Option, Table, Menu, MenuItem} from 'element-ui'
 // import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(Vuex);
 Vue.use(ElementUI);
 
+const myMenu = {
+	mixins: [Menu],
+	methods: {
+		mixColor(color, percent) {
+			return `rgba(0, 0, 0, ${ (this.transparency)})`;
+		},
+	},
+	props: {
+		transparency: {
+			default: 0.2
+		}
+	}
+};
+const myMenuItem = {
+	mixins: [MenuItem],
+	computed: {
+		backgroundColor() {return `rgba(0, 0, 0, 0)`},
+		// hoverBackground() {return "00000019"}
+	}
+}
+
 Vue.component(Select.name, Select);
 Vue.component(Option.name, Option);
 Vue.component(Table.name, Table);
+Vue.component(Menu.name, myMenu);
+Vue.component(MenuItem.name, myMenuItem);
 
 const store = new Vuex.Store({
 	state: {

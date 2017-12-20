@@ -179,7 +179,7 @@
 				let userId = this.$route.params['userId'];
 				let newState = -1;
 				if (item.state === 0) {
-					newState = 3;
+					newState = 1;
 				} else if (item.state === 3) {
 					newState = 0;
 				} else return;
@@ -187,9 +187,9 @@
 					userId,
 					wishlistId,
 					item.id,
-					1,
+					newState,
 					function () {
-						item.state = newState;
+						item.state = newState ? 3 : 0;
 					},
 					this.errorCallback)
 			},
@@ -223,13 +223,13 @@
 			},
 			getItemColor(item) {
 				if (item.state === 3)
-					return '#aab1d0';
+					return '#c4e1fb';
 				else if (item.state === 2)
-					return '#c2c2c2';
+					return '#EDEFF0';
 				else if (item.state === 1)
-					return '#bed0a6';
+					return '#EDEFF0';
 				else if (item.state === 0)
-					return '#ffffff';
+					return '#FFFFFF';
 				else
 					return '#000000'
 			}
@@ -252,7 +252,7 @@
 		background-color: #FFFFFF;
 		color: #4d4d4d;
 		border-radius: 3px;
-		border: none;
+		border: #ffffff;
 		outline: none;
 		opacity: 1;
 		width: 90%;
@@ -273,6 +273,6 @@
 
 	.box-card {
 		width: 100%;
-		background-color: #d9dee3;
+		background-color: #E2E4E6;
 	}
 </style>

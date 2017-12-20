@@ -38,15 +38,14 @@
 
 <style lang="scss">
 	.el-header, .el-footer {
-		background-color: #B3C0D1;
-		color: #333;
+		/*background-color: #B3C0D1;*/
+		/*color: #333;*/
 		text-align: center;
 		line-height: 60px;
 		padding: 0;
 	}
 
 	.el-main {
-		background-color: #E9EEF3;
 		color: #333;
 		line-height: 100%;
 		height: 100%;
@@ -54,6 +53,7 @@
 
 	.el-container, .el-main, #page-content {
 		height: 100%;
+		background-color: #0079BF;
 	}
 
 	 html, body{

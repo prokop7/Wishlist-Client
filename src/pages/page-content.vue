@@ -204,5 +204,11 @@
 
 	#create-wishlist {
 		display: inline-block;
+		color: rgb(179, 211, 229);
+		border: none;
+		background-color: rgba(0, 0, 0, 0.15);
+	}
+	#create-wishlist:hover {
+		background-color: rgba(0, 0, 0, 0.30);
 	}
 </style>
