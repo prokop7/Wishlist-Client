@@ -11,12 +11,12 @@
 				</wishlist>
 			</div>
 		</div>
-		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true">Create wishlist</el-button>
+		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true" style="margin-right: 20px">Create wishlist</el-button>
 		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name"
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
-					<el-input v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
+					<el-input type="textarea" v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Visibility" :label-width="formLabelWidth" prop="visibility">
 					<el-select v-model="wishlistCreateForm.visibility"
@@ -269,5 +269,16 @@
 
 	#create-wishlist:hover {
 		background-color: rgba(0, 0, 0, 0.30);
+	}
+
+	.el-dialog__header {
+		/*padding: 15px 15px 10px;*/
+		word-wrap: break-word;
+		white-space: normal;
+	}
+
+	.el-dialog__body {
+		padding-bottom: 2px;
+		padding-top: 2px;
 	}
 </style>

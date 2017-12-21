@@ -10,6 +10,7 @@
 					</router-view>
 				</el-main>
 			</el-container>
+			<el-footer height="8px"></el-footer>
 		</el-container>
 	</div>
 </template>
@@ -17,6 +18,7 @@
 	import TopBar from "./pages/top-bar.vue"
 	import PageContent from "./pages/page-content.vue"
 	import ElAside from "../node_modules/element-ui/packages/aside/src/main.vue";
+	import ElFooter from "../node_modules/element-ui/packages/footer/src/main.vue";
 
 	const data = {
 		code: "",
@@ -25,6 +27,7 @@
 
 	export default {
 		components: {
+			ElFooter,
 			ElAside,
 			TopBar,
 			PageContent

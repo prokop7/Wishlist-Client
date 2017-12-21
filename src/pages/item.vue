@@ -1,6 +1,6 @@
 <template>
 	<div id="item">
-		<div class="item" :style="'background-color:' + itemColor">
+		<div class="item" :style="'position: relative;background-color:' + itemColor">
 			<div class="item-name"
 			     @click="itemVisible=true;setListener();">
 				<p>{{item.name}}</p>
@@ -18,7 +18,7 @@
 				:visible.sync="itemVisible"
 				width="50%"
 				center
-				v-if="itemVisibleObject">
+				v-if="itemVisibleObject" style="position: static">
 			<el-form :model="itemVisibleObject" :ref="'itemEditForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
 					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.name"
@@ -118,7 +118,6 @@
 				window.removeEventListener('keyup', this.keyListener)
 			},
 			keyListener(event) {
-				console.log(event);
 				if (event.keyCode === 13)
 					if (this.itemVisible && this.isMine)
 						this.editItem();
@@ -171,6 +170,24 @@
 	}
 </script>
 <style lang="scss">
+	.item {
+		justify-content: flex-start;
+		align-items: flex-start;
+		background-color: #FFFFFF;
+		color: #4d4d4d;
+		border-radius: 3px;
+		border: #ffffff;
+		outline: none;
+		opacity: 1;
+		width: 95%;
+		padding: 1% 3%;
+		min-height: 17px;
+		margin: 0 auto 7px auto;
+		cursor: pointer;
+		font-weight: 400;
+		font-size: 12px;
+	}
+
 	.item-name {
 		font-size: 14px;
 		min-height: 40px;
@@ -178,9 +195,15 @@
 		width: 65%;
 		white-space: normal;
 		overflow-wrap: break-word;
+		color: #4d4d4d;
+		font-weight: 400;
 	}
 
 	.item-action-button {
+		position: absolute;
+		right:10px;
 		vertical-align: middle;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 </style>

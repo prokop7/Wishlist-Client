@@ -1,6 +1,6 @@
 .u-fancy-scrollbar {
 	-webkit-overflow-scrolling: touch;
-	-webkit-transform: translateZ(0);
+	/*-webkit-transform: translateZ(0);*/
 }
 
 .u-fancy-scrollbar::-webkit-scrollbar {

@@ -8,8 +8,8 @@
 				           icon="el-icon-arrow-left"
 				           size="mini">
 				</el-button>
-				<div class="wishlist-name">
-					<p style="white-space: normal; word-wrap: break-word; margin: 0">{{wishlist.name}}</p>
+				<div class="wishlist-name" style="white-space: normal; word-wrap: break-word; margin: 0">
+					{{wishlist.name}}
 				</div>
 				<el-button class="move-right-button"
 				           @click="$emit('move', wishlist, 1)"
@@ -33,6 +33,9 @@
 				      :isMine="isMine">
 				</item>
 			</div>
+			<div class="item" style="cursor: auto; background-color: #c4c9cc" v-if="wishlist.items.length == 0 && !isMine">
+				There is no items
+			</div>
 			<div class="card-footer">
 				<div class="bottom clearfix" v-if="isMine">
 					<el-button
@@ -48,7 +51,7 @@
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistEditForm" ref="wishlistEditForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
-					<el-input v-model="wishlistEditForm.name" auto-complete="off"></el-input>
+					<el-input type="textarea" v-model="wishlistEditForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Visibility" :label-width="formLabelWidth" prop="visibility">
 					<el-select v-model="wishlistEditForm.visibility"
@@ -86,16 +89,16 @@
 		           :visible.sync="itemCreateVisible">
 			<el-form :model="itemCreateForm" :ref="'itemCreateForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input v-model="itemCreateForm.name" auto-complete="off" :autofocus="true"></el-input>
+					<el-input type="textarea" v-model="itemCreateForm.name" auto-complete="off" :autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
-					<el-input v-model="itemCreateForm.description" auto-complete="off"></el-input>
+					<el-input type="textarea" v-model="itemCreateForm.description" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
-					<el-input v-model="itemCreateForm.price" auto-complete="off"></el-input>
+					<el-input type="textarea" v-model="itemCreateForm.price" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
-					<el-input v-model="itemCreateForm.link" auto-complete="off"></el-input>
+					<el-input type="textarea" v-model="itemCreateForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="createItem();removeListener()">Save</el-button>
@@ -240,30 +243,13 @@
 </script>
 
 <style lang="scss">
-	.item {
-		justify-content: flex-start;
-		align-items: flex-start;
-		background-color: #FFFFFF;
-		color: #4d4d4d;
-		border-radius: 3px;
-		border: #ffffff;
-		outline: none;
-		opacity: 1;
-		width: 95%;
-		padding: 1% 3%;
-		min-height: 17px;
-		margin: 0 auto 7px auto;
-		cursor: pointer;
-		font-weight: 400;
-		font-size: 12px;
-	}
 
 	.el-card__body {
 		padding: 0 10px;
 	}
 
 	.items-body {
-		overflow-y: scroll;
+		overflow-y: auto;
 		overflow-x: hidden;
 		max-height: 70vh;
 	}
@@ -304,5 +290,8 @@
 		vertical-align: middle;
 		display: inline-block;
 		width: 75%;
+		font-weight: 600;
+		color: #333;
+		font-size: 14px;
 	}
 </style>
