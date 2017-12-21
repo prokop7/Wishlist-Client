@@ -11,26 +11,13 @@
 				</el-button>
 			</div>
 			<div class="items-body">
-				<div class="item"
-				     :id="'item-' + wishlist.id + '-' + item.id"
-				     v-for="item in wishlist.items"
-				     :key="item.id" :style="'background-color:' + getItemColor(item)">
-					<el-button @click="displayItem(item);setListener();" type="text">{{item.name}}</el-button>
-					<el-button v-if="!isMine&&(item.state!==2&&item.state!==1)"
-					           @click="takeItem(item, wishlist.id)"
-					           size="mini"
-					           :type="item.state === 0 ? 'primary' : 'danger'"
-					           style="float: right;margin-top: 7px">
-						{{item.state === 0 ? 'Take' : 'Cancel'}}
-					</el-button>
-					<el-button v-if="isMine&&item.state!==2"
-					           @click="acceptReceiving(item, wishlist.id)"
-					           type="success"
-					           size="mini"
-					           style="float: right;margin-top: 7px">
-						Accept
-					</el-button>
-				</div>
+				<item v-for="item in wishlist.items"
+				      :key="item.id"
+				      :item="item"
+				      :wishlistId="wishlist.id"
+				      :userId="$route.params['userId']"
+				      :isMine="isMine">
+				</item>
 			</div>
 			<div class="card-footer">
 				<div class="bottom clearfix" v-if="isMine">
@@ -81,33 +68,6 @@
 				</el-form-item>
 			</el-form>
 		</el-dialog>
-		<el-dialog
-				:title="isMine?'Edit':'View'"
-				:visible.sync="itemVisible"
-				width="50%"
-				center
-				v-if="itemVisibleObject">
-			<el-form :model="itemVisibleObject" :ref="'itemEditForm'" :rules="formRules">
-				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.description"
-					          auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.price" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.link" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item v-if="isMine">
-					<el-button type="primary" @click="editItem();removeListener();" :autofocus="true">Save
-					</el-button>
-					<el-button @click="itemVisible=false;removeListener();">Cancel</el-button>
-				</el-form-item>
-			</el-form>
-		</el-dialog>
 		<el-dialog :title="'Item: ' + itemCreateForm.name"
 		           :visible.sync="itemCreateVisible">
 			<el-form :model="itemCreateForm" :ref="'itemCreateForm'" :rules="formRules">
@@ -133,10 +93,12 @@
 </template>
 <script>
 	import Ajax from '@/api'
-	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
+	import Item from './item.vue'
 
 	export default {
-		components: {ElButton},
+		components: {
+			Item
+		},
 		props: {
 			wishlist: {name: "", id: 0, items: []},
 			isMine: false
@@ -162,14 +124,6 @@
 					friendExclusion: []
 				},
 				formLabelWidth: '120px',
-				itemVisible: false,
-				itemVisibleObject: {
-					id: "",
-					name: "",
-					description: "",
-					price: "",
-					link: ""
-				},
 				takeItemObjects: {},
 				wishlistFormVisible: false,
 				wishlistEditForm: {
@@ -194,25 +148,6 @@
 							},
 							this.errorHandle);
 						this.itemCreateForm = {}
-					} else {
-						return false;
-					}
-				});
-			},
-			editItem() {
-				this.$refs['itemEditForm'].validate((valid) => {
-					if (valid) {
-						this.itemVisible = false;
-						let _this = this;
-						Ajax.editItem(
-							this.$store.state.user.id,
-							this.wishlist.id,
-							this.itemVisibleObject.id,
-							this.itemVisibleObject,
-							function (data) {
-								_this.$emit('loadWishlists', data)
-							},
-							this.errorHandle);
 					} else {
 						return false;
 					}
@@ -262,54 +197,6 @@
 					}
 				});
 			},
-			getItem(item) {
-				if (!item)
-					return [];
-				let keys = Object.keys(item);
-				let itemView = [];
-				keys.forEach(key => {
-					if (item[key] && key !== 'id' && key !== 'name')
-						itemView.push({key: key, value: item[key]})
-				});
-				return itemView;
-			},
-			displayItem(item) {
-				this.itemVisibleObject = item;
-				this.itemVisible = true;
-			},
-			takeItem(item, wishlistId) {
-				let userId = this.$route.params['userId'];
-				let newState = -1;
-				if (item.state === 0) {
-					newState = 1;
-				} else if (item.state === 3) {
-					newState = 0;
-				} else return;
-				Ajax.changeItemState(
-					userId,
-					wishlistId,
-					item.id,
-					newState,
-					function () {
-						item.state = newState ? 3 : 0;
-					},
-					this.errorCallback)
-			},
-			acceptReceiving(item, wishlistId) {
-				let userId = this.$route.params['userId'];
-				Ajax.changeItemState(
-					userId,
-					wishlistId,
-					item.id,
-					2,
-					function () {
-						item.state = 2;
-					},
-					this.errorCallback)
-			},
-			errorCallback(e) {
-				console.log(e);
-			},
 			setListener() {
 				window.addEventListener('keyup', this.keyListener);
 			},
@@ -324,18 +211,6 @@
 						this.createItem();
 					else if (this.wishlistFormVisible)
 						this.editWishlist();
-			},
-			getItemColor(item) {
-				if (item.state === 3)
-					return '#c4e1fb';
-				else if (item.state === 2)
-					return '#EDEFF0';
-				else if (item.state === 1)
-					return '#EDEFF0';
-				else if (item.state === 0)
-					return '#FFFFFF';
-				else
-					return '#000000'
 			}
 		},
 		mounted: function () {

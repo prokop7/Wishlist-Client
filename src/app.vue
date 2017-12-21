@@ -63,5 +63,10 @@
 	#app {
 		height: 100vh;
 	}
+	* {
+		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+		/*line-height: 18px;*/
+		font-weight: 400;
+	}
 
 </style>
