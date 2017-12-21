@@ -1,0 +1,72 @@
+.u-fancy-scrollbar {
+	-webkit-overflow-scrolling: touch;
+	-webkit-transform: translateZ(0);
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar {
+	height: 9px;
+	width: 9px
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-button:end:increment,.u-fancy-scrollbar::-webkit-scrollbar-button:start:decrement {
+	background: transparent;
+	display: none
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-track-piece {
+	background: #d6dadc
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-track-piece:vertical:start {
+	border-radius: 5px 5px 0 0
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-track-piece:vertical:end {
+	border-radius: 0 0 5px 5px
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-track-piece:horizontal:start {
+	border-radius: 5px 0 0 5px
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-track-piece:horizontal:end {
+	border-radius: 0 5px 5px 0
+}
+
+.u-fancy-scrollbar::-webkit-scrollbar-thumb:horizontal,.u-fancy-scrollbar::-webkit-scrollbar-thumb:vertical {
+	background: #c4c9cc;
+	border-radius: 5px;
+	display: block;
+	height: 50px
+}
+
+.wishlists-board {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: row;
+	flex-direction: row;
+	overflow-x: auto;
+	overflow-y: hidden
+}
+
+.wishlists-board::-webkit-scrollbar {
+	height: 13px;
+	width: 13px
+}
+
+.wishlists-board::-webkit-scrollbar-thumb:horizontal,.wishlists-board::-webkit-scrollbar-thumb:vertical {
+	background: hsla(0,0%,100%,.4)
+}
+
+.wishlists-board::-webkit-scrollbar-track-piece {
+	background: rgba(0,0,0,.15)
+}
+
+.wishlists-board::-webkit-scrollbar-button {
+	display: block;
+	height: 5px;
+	width: 5px
+}

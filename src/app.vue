@@ -5,7 +5,7 @@
 				<top-bar></top-bar>
 			</el-header>
 			<el-container>
-				<el-main>
+				<el-main  class="wishlists-board u-fancy-scrollbar">
 					<router-view>
 					</router-view>
 				</el-main>
@@ -68,5 +68,4 @@
 		/*line-height: 18px;*/
 		font-weight: 400;
 	}
-
 </style>

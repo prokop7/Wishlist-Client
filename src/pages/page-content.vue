@@ -154,20 +154,26 @@
 				this.$store.commit('setUser', result);
 			},
 			move(wishlist, direction) {
-				let index = wishlist.wishlistOrder;
+				let i = wishlist.wishlistOrder;
+				let _this = this;
+				let checkBoundaries = function (index) {
+					return index >= 0 && index < _this.wishlists.length
+				};
 				if (direction > 0) {
-					if (index < this.wishlists.length) {
-						this.wishlists[index].wishlistOrder++;
-						this.wishlists[index + 1].wishlistOrder--;
+					if (checkBoundaries(this.wishlists[i].wishlistOrder + 1) &&
+						checkBoundaries(this.wishlists[i + 1].wishlistOrder - 1)) {
+						this.wishlists[i].wishlistOrder++;
+						this.wishlists[i + 1].wishlistOrder--;
 						this.wishlists.sort(function (w1, w2) {
 							return w1.wishlistOrder - w2.wishlistOrder
 						});
 						this.sendOrder()
 					}
 				} else {
-					if (index > 0) {
-						this.wishlists[index].wishlistOrder--;
-						this.wishlists[index - 1].wishlistOrder++;
+					if (checkBoundaries(this.wishlists[i].wishlistOrder - 1) &&
+						checkBoundaries(this.wishlists[i - 1].wishlistOrder + 1)) {
+						this.wishlists[i].wishlistOrder--;
+						this.wishlists[i - 1].wishlistOrder++;
 						this.wishlists.sort(function (w1, w2) {
 							return w1.wishlistOrder - w2.wishlistOrder
 						});

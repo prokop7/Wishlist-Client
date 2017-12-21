@@ -6,6 +6,8 @@ import Vuex from 'vuex'
 import ElementUI from 'element-ui'
 import {Select, Option, Table, Menu, MenuItem, Input, Message} from 'element-ui'
 
+import styles from './css/scrollbars.css'
+
 Vue.use(Vuex);
 Vue.use(ElementUI);
 

@@ -8,7 +8,9 @@
 				           icon="el-icon-arrow-left"
 				           size="mini">
 				</el-button>
-				<span style="vertical-align: middle">{{wishlist.name}}</span>
+				<div class="wishlist-name">
+					<p style="white-space: normal; word-wrap: break-word; margin: 0">{{wishlist.name}}</p>
+				</div>
 				<el-button class="move-right-button"
 				           @click="$emit('move', wishlist, 1)"
 				           v-if="isMine"
@@ -22,7 +24,7 @@
 				           size="mini">
 				</el-button>
 			</div>
-			<div class="items-body">
+			<div class="items-body u-fancy-scrollbar">
 				<item v-for="item in wishlist.items"
 				      :key="item.id"
 				      :item="item"
@@ -269,6 +271,7 @@
 	.el-card__header {
 		padding: 8px 6px 8px 8px;
 	}
+
 	.move-right-button {
 		float: right;
 		background-color: rgba(0, 0, 0, 0);
@@ -295,5 +298,11 @@
 	.box-card {
 		width: 100%;
 		background-color: #E2E4E6;
+	}
+
+	.wishlist-name {
+		vertical-align: middle;
+		display: inline-block;
+		width: 75%;
 	}
 </style>
