@@ -41,6 +41,10 @@ function editWishlist(userId, wishlistId, wishlist, successCallback, errorCallba
 	request("PUT", `${serverUri}/user/${userId}/wishlist/${wishlistId}`, wishlist, successCallback, errorCallback, apiToken)
 }
 
+function sendWishlistsOrder(userId, order, successCallback, errorCallback) {
+	request('PUT', `${serverUri}/user/${userId}/wishlist/`, order, successCallback, errorCallback, apiToken)
+}
+
 export default {
 	setToken,
 	getWishlists,
@@ -51,5 +55,6 @@ export default {
 	addItem,
 	editItem,
 	changeItemState,
-	editWishlist
+	editWishlist,
+	sendWishlistsOrder
 }

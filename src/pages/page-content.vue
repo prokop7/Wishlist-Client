@@ -6,6 +6,7 @@
 				<wishlist
 						@loadWishlists="loadWishlists"
 						:isMine="isUser()"
+						@move="move"
 						:wishlist="wishlist">
 				</wishlist>
 			</div>
@@ -66,7 +67,7 @@
 		},
 		data: function () {
 			return {
-				wishlists: [{name: "", id: 0, items: []}],
+				wishlists: [{name: "", id: 0, wishlistOrder: 0, items: []}],
 				userId: 0,
 				wishlistFormVisible: false,
 				wishlistCreateForm: {
@@ -151,6 +152,45 @@
 			},
 			setUser(result) {
 				this.$store.commit('setUser', result);
+			},
+			move(wishlist, direction) {
+				let index = wishlist.wishlistOrder;
+				if (direction > 0) {
+					if (index < this.wishlists.length) {
+						this.wishlists[index].wishlistOrder++;
+						this.wishlists[index + 1].wishlistOrder--;
+						this.wishlists.sort(function (w1, w2) {
+							return w1.wishlistOrder - w2.wishlistOrder
+						});
+						this.sendOrder()
+					}
+				} else {
+					if (index > 0) {
+						this.wishlists[index].wishlistOrder--;
+						this.wishlists[index - 1].wishlistOrder++;
+						this.wishlists.sort(function (w1, w2) {
+							return w1.wishlistOrder - w2.wishlistOrder
+						});
+						this.sendOrder()
+					}
+				}
+			},
+			sendOrder() {
+				let orders = [];
+				this.wishlists.forEach(wishlist => orders.push({
+					id: wishlist.id,
+					wishlistOrder: wishlist.wishlistOrder
+				}));
+				let _this = this;
+				Ajax.sendWishlistsOrder(
+					this.$store.state.user.id,
+					orders,
+					() => _this.$message({
+						message: 'The wishlists order was updated',
+						showClose: true,
+					}),
+					(e) => console.log(e)
+				)
 			}
 		},
 		mounted: function () {
@@ -172,6 +212,9 @@
 					this.loadWishlists(this.$route.params['userId']);
 				}
 			}
+			this.wishlists.sort(function (w1, w2) {
+				return w1.wishlistOrder - w2.wishlistOrder
+			})
 		},
 		watch: {
 			'$route'(to, from) {

@@ -2,7 +2,19 @@
 	<div :id="'wishlist-' + wishlist.id">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
-				<span>{{wishlist.name}}</span>
+				<el-button class="move-left-button"
+				           @click="$emit('move', wishlist, 0)"
+				           v-if="isMine"
+				           icon="el-icon-arrow-left"
+				           size="mini">
+				</el-button>
+				<span style="vertical-align: middle">{{wishlist.name}}</span>
+				<el-button class="move-right-button"
+				           @click="$emit('move', wishlist, 1)"
+				           v-if="isMine"
+				           icon="el-icon-arrow-right"
+				           size="mini">
+				</el-button>
 				<el-button v-if="isMine"
 				           @click="displayWishlist()"
 				           id="edit-button"
@@ -255,9 +267,22 @@
 	}
 
 	.el-card__header {
-		padding-top: 8px;
-		padding-bottom: 8px;
-		padding-left: 16px;
+		padding: 8px 6px 8px 8px;
+	}
+	.move-right-button {
+		float: right;
+		background-color: rgba(0, 0, 0, 0);
+		border: none;
+		padding: 4px 0;
+		margin: 0 0 0 10px;
+	}
+
+	.move-left-button {
+		float: left;
+		background-color: rgba(0, 0, 0, 0);
+		border: none;
+		padding: 4px 0;
+		margin: 0 5px 0 0;
 	}
 
 	#edit-button {
