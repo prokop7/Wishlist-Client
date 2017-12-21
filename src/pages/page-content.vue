@@ -1,5 +1,5 @@
 <template>
-	<div id="page-content" style="white-space: nowrap">
+	<div id="page-content">
 		<div class="column"
 		     v-for="wishlist in wishlists">
 			<div class="grid-content">
@@ -159,7 +159,7 @@
 			else {
 				Ajax.setToken(this.$store.state.token);
 				if (!this.$route.params['userId']) {
-					this.loadWishlists(this.$store.state.user.id);
+					this.$router.push('/user/' + JwtDecode(this.$store.state.token).sub);
 				} else {
 					this.loadWishlists(this.$route.params['userId']);
 				}
@@ -176,6 +176,7 @@
 <style lang="scss">
 	#page-content {
 		text-align: left;
+		white-space: nowrap;
 	}
 
 	.text {
