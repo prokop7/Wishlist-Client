@@ -144,6 +144,7 @@
 							this.wishlist.id,
 							this.itemCreateForm,
 							function (data) {
+								_this.$message({message: 'The item was created', showClose: true,});
 								_this.$emit('loadWishlists', data)
 							},
 							this.errorHandle);
@@ -182,7 +183,8 @@
 							userId,
 							this.wishlist.id,
 							wishlist,
-							function () {
+							() => {
+								_this.$message({message: 'The wishlist was edited', showClose: true,});
 								_this.$emit('loadWishlists', userId)
 							},
 							this.errorHandle);

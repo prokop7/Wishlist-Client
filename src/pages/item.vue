@@ -2,7 +2,7 @@
 	<div id="item">
 		<div class="item" :style="'background-color:' + itemColor">
 			<div class="item-name"
-					@click="itemVisible=true;setListener();">
+			     @click="itemVisible=true;setListener();">
 				<p>{{item.name}}</p>
 			</div>
 			<el-button class="item-action-button" v-if="(item.state!==2&&item.state!==1)"
@@ -21,19 +21,23 @@
 				v-if="itemVisibleObject">
 			<el-form :model="itemVisibleObject" :ref="'itemEditForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.name" auto-complete="off"></el-input>
+					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.name"
+					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.description"
+					<el-input type="textarea" :disabled="!isMine||item.state===2"
+					          v-model="itemVisibleObject.description"
 					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.price" auto-complete="off"></el-input>
+					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.price"
+					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
-					<el-input :disabled="!isMine" v-model="itemVisibleObject.link" auto-complete="off"></el-input>
+					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.link"
+					          auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item v-if="isMine">
+				<el-form-item v-if="isMine&&item.state!==2">
 					<el-button type="primary" @click="editItem(true);removeListener();" :autofocus="true">Save
 					</el-button>
 					<el-button @click="itemVisible=false;removeListener();">Cancel</el-button>
@@ -42,20 +46,6 @@
 		</el-dialog>
 	</div>
 </template>
-<style lang="scss">
-	.item-name {
-		font-size: 14px;
-		min-height: 40px;
-		display: inline-block;
-		width: 65%;
-		white-space: normal;
-		overflow-wrap: break-word;
-	}
-
-	.item-action-button {
-		vertical-align: middle;
-	}
-</style>
 <script>
 	import Ajax from "../api/index";
 
@@ -91,12 +81,7 @@
 						_this.itemVisibleObject.id,
 						_this.itemVisibleObject,
 						data => {
-							const h = _this.$createElement;
-
-							_this.$notify({
-								title: 'Saved',
-								message: h('i', { style: 'color: teal' }, 'The item was saved')
-							});
+							_this.$message({message: 'The item was saved', showClose: true,});
 							_this.$emit('loadWishlists', data)
 						},
 						e => console.log(e));
@@ -185,3 +170,17 @@
 		}
 	}
 </script>
+<style lang="scss">
+	.item-name {
+		font-size: 14px;
+		min-height: 40px;
+		display: inline-block;
+		width: 65%;
+		white-space: normal;
+		overflow-wrap: break-word;
+	}
+
+	.item-action-button {
+		vertical-align: middle;
+	}
+</style>

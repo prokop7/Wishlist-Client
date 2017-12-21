@@ -116,7 +116,15 @@
 							visibility: this.wishlistCreateForm.visibility,
 							exclusions: exclusions
 						};
-						Ajax.addWishlist(userId, wishlist, this.loadWishlists, this.errorHandle);
+						let _this = this;
+						Ajax.addWishlist(
+							userId,
+							wishlist,
+							(data) => {
+								_this.$message({message: 'The wishlist was created', showClose: true,});
+								_this.loadWishlists(data)
+							},
+							this.errorHandle);
 						this.wishlistCreateForm = {
 							name: "",
 							visibility: "",
@@ -209,6 +217,7 @@
 		border: none;
 		background-color: rgba(0, 0, 0, 0.15);
 	}
+
 	#create-wishlist:hover {
 		background-color: rgba(0, 0, 0, 0.30);
 	}
