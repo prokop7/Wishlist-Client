@@ -225,7 +225,6 @@
 
 <style lang="scss">
 	.item {
-		/*display: flex;*/
 		justify-content: flex-start;
 		align-items: flex-start;
 		background-color: #FFFFFF;
@@ -239,7 +238,6 @@
 		min-height: 17px;
 		margin: 0 auto 7px auto;
 		cursor: pointer;
-		/*font-family: 'Open Sans', sans-serif;*/
 		font-weight: 400;
 		font-size: 12px;
 	}

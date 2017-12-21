@@ -1,22 +1,14 @@
 <template>
 	<div id="item">
 		<div class="item" :style="'background-color:' + itemColor">
-			<div @click="itemVisible=true;setListener();">
-				<el-input type="textarea"
-				          autosize
-				          @focus="focus()"
-				          @blur="blur()"
-				          v-model="itemVisibleObject.name">
-				</el-input>
+			<div class="item-name"
+					@click="itemVisible=true;setListener();">
+				<p>{{item.name}}</p>
 			</div>
-			<el-button @click="itemVisible=true;setListener();"
-			           type="text">
-			</el-button>
-			<el-button v-if="(item.state!==2&&item.state!==1)"
+			<el-button class="item-action-button" v-if="(item.state!==2&&item.state!==1)"
 			           @click="changeItemState()"
 			           size="mini"
-			           :type="buttonType"
-			           style="float: right; margin-top: 7px">
+			           :type="buttonType">
 				{{buttonText}}
 			</el-button>
 		</div>
@@ -51,15 +43,17 @@
 	</div>
 </template>
 <style lang="scss">
-	.el-textarea {
-		width: 62%;
+	.item-name {
+		font-size: 14px;
+		min-height: 40px;
+		display: inline-block;
+		width: 65%;
+		white-space: normal;
+		overflow-wrap: break-word;
 	}
 
-	.el-textarea__inner {
-		resize: none;
-		border: none;
-		word-wrap: break-word;
-		background-color: rgba(0,0,0,0);
+	.item-action-button {
+		vertical-align: middle;
 	}
 </style>
 <script>
@@ -137,14 +131,6 @@
 			},
 			removeListener() {
 				window.removeEventListener('keyup', this.keyListener)
-			},
-			focus() {
-				this.previousName = this.itemVisibleObject.name;
-			},
-			blur() {
-				if (this.previousName !== this.itemVisibleObject.name) {
-					this.editItem(false);
-				}
 			},
 			keyListener(event) {
 				console.log(event);

@@ -1,5 +1,5 @@
 <template>
-	<div id="page-content" style="white-space: nowrap">
+	<div id="page-content">
 		<div class="column"
 		     v-for="wishlist in wishlists">
 			<div class="grid-content">
@@ -176,6 +176,7 @@
 <style lang="scss">
 	#page-content {
 		text-align: left;
+		white-space: nowrap;
 	}
 
 	.text {
