@@ -1,12 +1,13 @@
 <template>
 	<div id="item">
-		<div class="item" :style="'position: relative;background-color:' + itemColor">
+		<div :id="'item-' + item.id" class="item" :style="'position: relative;background-color:' + itemColor">
 			<div class="item-name"
 			     @click="itemVisible=true;setListener();">
 				<p>{{item.name}}</p>
 			</div>
 			<el-button class="item-action-button" v-if="(item.state!==2&&item.state!==1)"
 			           @click="changeItemState()"
+			           :style="showButton?'':'background-color:transparent;border:0;color:transparent'"
 			           size="mini"
 			           :type="buttonType">
 				{{buttonText}}
@@ -67,7 +68,8 @@
 						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
 					],
 				},
-				previousName: ""
+				previousName: "",
+				showButton: false
 			}
 		},
 		methods: {
@@ -166,6 +168,12 @@
 						return 'Take';
 				return '';
 			}
+		},
+		mounted() {
+			let el = document.getElementById('item-' + this.item.id);
+			let _this = this;
+			el.addEventListener('mouseenter', () => _this.showButton=true);
+			el.addEventListener('mouseleave', () => _this.showButton=false)
 		}
 	}
 </script>
@@ -206,4 +214,5 @@
 		top: 50%;
 		transform: translateY(-50%);
 	}
+
 </style>

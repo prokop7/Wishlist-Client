@@ -33,6 +33,7 @@
 							multiple
 							:clearable="true"
 							placeholder="Select"
+							:collapseTags="true"
 							noDataText="No registered friends"
 							noMatchText="Not found">
 						<el-option
@@ -53,16 +54,12 @@
 	</div>
 </template>
 <script>
-	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 	import Ajax from "@/api"
-	import ElCol from "element-ui/packages/col/src/col";
 	import Wishlist from "./wishlist.vue"
 	import JwtDecode from 'jwt-decode'
 
 	export default {
 		components: {
-			ElCol,
-			ElButton,
 			Wishlist
 		},
 		data: function () {
@@ -72,7 +69,7 @@
 				wishlistFormVisible: false,
 				wishlistCreateForm: {
 					name: "",
-					visibility: "",
+					visibility: "2",
 					friendExclusion: []
 				},
 				formRules: {
@@ -128,7 +125,7 @@
 							this.errorHandle);
 						this.wishlistCreateForm = {
 							name: "",
-							visibility: "",
+							visibility: "2",
 							friendExclusion: []
 						}
 					} else {

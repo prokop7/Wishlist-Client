@@ -4,7 +4,7 @@ import App from './app.vue'
 import Vuex from 'vuex'
 
 import ElementUI from 'element-ui'
-import {Select, Option, Table, Menu, MenuItem, Input, Message} from 'element-ui'
+import {Menu, MenuItem} from 'element-ui'
 
 import styles from './css/scrollbars.css'
 
@@ -32,10 +32,6 @@ const myMenuItem = {
 	}
 }
 
-Vue.component(Select.name, Select);
-Vue.component(Option.name, Option);
-Vue.component(Table.name, Table);
-Vue.component(Input.name, Input);
 Vue.component(Menu.name, myMenu);
 Vue.component(MenuItem.name, myMenuItem);
 
