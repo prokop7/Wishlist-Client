@@ -16,7 +16,7 @@
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
-					<el-input type="textarea" v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
+					<el-input type="textarea" autosize v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Visibility" :label-width="formLabelWidth" prop="visibility">
 					<el-select v-model="wishlistCreateForm.visibility"

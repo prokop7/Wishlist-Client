@@ -5,7 +5,7 @@
 				<top-bar></top-bar>
 			</el-header>
 			<el-container>
-				<el-main  class="wishlists-board u-fancy-scrollbar">
+				<el-main class="wishlists-board u-fancy-scrollbar">
 					<router-view>
 					</router-view>
 				</el-main>
@@ -59,16 +59,26 @@
 		background-color: #0079BF;
 	}
 
-	 html, body{
-		 height:100%;
-		 margin: 0;
-	 }
+	html, body {
+		height: 100%;
+		margin: 0;
+	}
+
 	#app {
 		height: 100vh;
 	}
+
 	* {
 		font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 		/*line-height: 18px;*/
 		font-weight: 400;
+	}
+
+	.el-textarea__inner {
+		resize: none;
+		word-wrap: break-word;
+		background-color: rgba(0,0,0,0);
+		overflow: hidden;
+		/*height: auto!important;*/
 	}
 </style>

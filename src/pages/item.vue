@@ -2,7 +2,7 @@
 	<div id="item">
 		<div :id="'item-' + item.id" class="item" :style="'position: relative;background-color:' + itemColor">
 			<div class="item-name"
-			     @click="itemVisible=true;setListener();">
+			     @click="itemVisible=true;resizeTextAreas();setListener();">
 				<p>{{item.name}}</p>
 			</div>
 			<el-button class="item-action-button" v-if="(item.state!==2&&item.state!==1)"
@@ -22,20 +22,23 @@
 				v-if="itemVisibleObject" style="position: static">
 			<el-form :model="itemVisibleObject" :ref="'itemEditForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.name"
+					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
+					          v-model="itemVisibleObject.name"
 					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
-					<el-input type="textarea" :disabled="!isMine||item.state===2"
+					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
 					          v-model="itemVisibleObject.description"
 					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
-					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.price"
+					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
+					          v-model="itemVisibleObject.price"
 					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
-					<el-input type="textarea" :disabled="!isMine||item.state===2" v-model="itemVisibleObject.link"
+					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
+					          v-model="itemVisibleObject.link"
 					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item v-if="isMine&&item.state!==2">
@@ -127,6 +130,13 @@
 						this.createItem();
 					else if (this.wishlistFormVisible)
 						this.editWishlist();
+			},
+			resizeTextAreas() {
+				this.$nextTick(() => {
+						document.querySelectorAll('.el-textarea__inner')
+							.forEach(el => el.style.height = el.style["min-height"]);
+					}
+				)
 			}
 		},
 		computed: {
@@ -172,8 +182,8 @@
 		mounted() {
 			let el = document.getElementById('item-' + this.item.id);
 			let _this = this;
-			el.addEventListener('mouseenter', () => _this.showButton=true);
-			el.addEventListener('mouseleave', () => _this.showButton=false)
+			el.addEventListener('mouseenter', () => _this.showButton = true);
+			el.addEventListener('mouseleave', () => _this.showButton = false)
 		}
 	}
 </script>
@@ -209,7 +219,7 @@
 
 	.item-action-button {
 		position: absolute;
-		right:10px;
+		right: 10px;
 		vertical-align: middle;
 		top: 50%;
 		transform: translateY(-50%);

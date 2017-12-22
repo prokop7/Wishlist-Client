@@ -51,7 +51,7 @@
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistEditForm" ref="wishlistEditForm" :rules="formRules">
 				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
-					<el-input type="textarea" v-model="wishlistEditForm.name" auto-complete="off"></el-input>
+					<el-input type="textarea" autosize v-model="wishlistEditForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Visibility" :label-width="formLabelWidth" prop="visibility">
 					<el-select v-model="wishlistEditForm.visibility"
@@ -89,16 +89,16 @@
 		           :visible.sync="itemCreateVisible">
 			<el-form :model="itemCreateForm" :ref="'itemCreateForm'" :rules="formRules">
 				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
-					<el-input type="textarea" v-model="itemCreateForm.name" auto-complete="off" :autofocus="true"></el-input>
+					<el-input type="textarea" autosize v-model="itemCreateForm.name" auto-complete="off" :autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
-					<el-input type="textarea" v-model="itemCreateForm.description" auto-complete="off"></el-input>
+					<el-input type="textarea" autosize v-model="itemCreateForm.description" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
-					<el-input type="textarea" v-model="itemCreateForm.price" auto-complete="off"></el-input>
+					<el-input type="textarea" autosize v-model="itemCreateForm.price" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
-					<el-input type="textarea" v-model="itemCreateForm.link" auto-complete="off"></el-input>
+					<el-input type="textarea" autosize v-model="itemCreateForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="createItem();removeListener()">Save</el-button>
@@ -177,7 +177,6 @@
 					visibility: this.wishlist.visibility === 'PUBLIC' ? '2' : '0',
 					friendExclusion: []
 				};
-				console.log(this.wishlistEditForm);
 				this.wishlist.exclusions.forEach(excl => this.wishlistEditForm.friendExclusion.push(excl.id));
 				this.wishlistFormVisible = true;
 				this.setListener()
