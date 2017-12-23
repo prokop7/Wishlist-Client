@@ -109,6 +109,15 @@
 			loginRef() {
 				return this.isSigned ? "#" : loginUri
 			},
+		},
+		mounted() {
+			let locale = localStorage.getItem('locale');
+			this.$i18n.locale = locale ? locale : 'en';
+		},
+		watch: {
+			'$i18n.locale': function (locale) {
+				localStorage.setItem('locale', locale);
+			}
 		}
 	}
 </script>

@@ -56,7 +56,7 @@ export const messages = {
 		accept: 'Принять',
 		cancel: 'Отменить',
 		take: 'Взять',
-		save: 'Сохраить',
+		save: 'Сохранить',
 		edit: 'Редикатировать',
 		view: 'Просмотри',
 		select: 'Выбрать',

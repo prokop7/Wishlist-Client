@@ -275,7 +275,7 @@
 					this.wishlist.id,
 					orders,
 					() => _this.$message({
-						message: _this.$t('orderUpdated'),
+						message: _this.$t('messages.orderUpdated'),
 						showClose: true,
 					}),
 					(e) => console.log(e)
