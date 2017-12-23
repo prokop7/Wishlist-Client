@@ -55,8 +55,9 @@
 			</el-menu-item>
 			<el-menu-item
 					index="login"
-					id="login-link">
-				<a :href="loginRef"
+					id="login-link"
+					@click="loginProcess()">
+				<a href="#"
 				   target="_self">{{$t(isSigned ? "logout" : "login")}}</a>
 			</el-menu-item>
 			<el-menu-item index="locale" id="locale-change" route="#">
@@ -92,32 +93,36 @@
 			selectedMenu(index) {
 				if (index !== 'friends') {
 					this.optionValue = "";
-					if (index === 'login')
-						this.$router.push("/registration/?logout=true");
-					else
+					if (index === 'user' || index === 'photo')
 						this.$router.push("/user/" + this.$store.state.user.id);
 				}
 			},
 			setLocale(locale) {
 				this.$i18n.locale = locale;
+			},
+			loginProcess() {
+				if (this.isSigned) {
+					console.log('logout');
+					this.$store.commit('token', "");
+					localStorage.removeItem('token');
+					this.$router.push("/registration");
+				} else {
+					console.log(this.$store.state);
+					window.open(loginUri, "_self");
+				}
 			}
 		},
 		computed: {
 			isSigned() {
 				return !!this.$store.state.token
-			},
-			loginRef() {
-				return this.isSigned ? "#" : loginUri
-			},
+			}
 		},
 		mounted() {
 			let locale = localStorage.getItem('locale');
 			this.$i18n.locale = locale ? locale : 'en';
 		},
 		watch: {
-			'$i18n.locale': function (locale) {
-				localStorage.setItem('locale', locale);
-			}
+			'$i18n.locale': locale => localStorage.setItem('locale', locale)
 		}
 	}
 </script>
@@ -136,5 +141,5 @@
 	#login-link {
 		float: right;
 		padding-right: 20px;
-		}
+	}
 </style>

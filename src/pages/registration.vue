@@ -21,43 +21,28 @@
 				this.$store.commit('setUser', {});
 				localStorage.removeItem('token')
 			} else if (localStorage.getItem('token')) {
-				this.state = "Wait";
-				let token = localStorage.getItem('token');
-				this.$store.commit('token', token);
-				Ajax.setToken(token);
-				this.loadUser(jwtDecode(token).sub);
+				this.setToken(localStorage.getItem('token'))
 			}
-			else
-				this.register()
+			else if (this.code)
+				this.register();
 		},
 		methods: {
 			register() {
-				if (this.code) {
-					Ajax.registerWithCode(this.code, this.setToken, this.error)
-				} else
-					console.log("EMPTY")
+				let _this = this;
+				Ajax.registerWithCode(
+					this.code,
+					(data) => _this.setToken(data['accessToken']),
+					this.error)
 			},
 			error() {
 				console.log("ERROR")
 			},
-			setToken(d) {
-				let token = d['accessToken'];
+			setToken(token) {
 				localStorage.setItem('token', token);
 				this.$store.commit('token', token);
 				Ajax.setToken(token);
-				this.loadUser(jwtDecode(token).sub)
+				this.$router.push("/user/" + jwtDecode(token).sub)
 			},
-			loadUser(userId) {
-				Ajax.getUser(userId, this.setUser, this.error);
-				Ajax.getUserFriends(userId, this.setUserFriends, this.error);
-			},
-			setUser(result) {
-				this.$store.commit('setUser', result);
-				this.$router.push("/user/" + result.id)
-			},
-			setUserFriends(result) {
-				this.$store.commit('friends', result);
-			}
 		}
 	}
 </script>

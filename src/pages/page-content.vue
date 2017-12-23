@@ -1,5 +1,5 @@
 <template>
-	<div id="page-content">
+	<div id="page-content" v-loading.fullscreen.lock="globalLoading">
 		<div class="column"
 		     v-for="wishlist in wishlists">
 			<div class="grid-content">
@@ -65,6 +65,11 @@
 		data: function () {
 			return {
 				wishlists: [{name: "", id: 0, wishlistOrder: 0, items: []}],
+				loading: {
+					user: false,
+					wishlists: false,
+					friends: false
+				},
 				userId: 0,
 				wishlistFormVisible: false,
 				wishlistCreateForm: {
@@ -139,16 +144,21 @@
 			setWishlistNames() {
 				this.wishlistNames = [];
 				this.wishlists.forEach(w => this.wishlistNames.push(w.name));
+				this.loading.wishlists = false;
 			},
 			loadUser(userId) {
+				this.loading.user = true;
+				this.loading.friends = true;
 				Ajax.getUser(userId, this.setUser, this.error);
 				Ajax.getUserFriends(userId, this.setUserFriends, this.error);
 			},
 			setUserFriends(result) {
 				this.$store.commit('friends', result);
+				this.loading.friends = false;
 			},
 			setUser(result) {
 				this.$store.commit('setUser', result);
+				this.loading.user = false;
 			},
 			move(wishlist, direction) {
 				let i = wishlist.wishlistOrder;
@@ -212,12 +222,18 @@
 				if (!this.$route.params['userId']) {
 					this.$router.push('/user/' + JwtDecode(this.$store.state.token).sub);
 				} else {
+					this.loading.wishlists = true;
 					this.loadWishlists(this.$route.params['userId']);
 				}
 			}
 			this.wishlists.sort(function (w1, w2) {
 				return w1.wishlistOrder - w2.wishlistOrder
 			})
+		},
+		computed: {
+			globalLoading() {
+				return this.loading.user || this.loading.friends || this.loading.wishlists
+			}
 		},
 		watch: {
 			'$route'(to, from) {
