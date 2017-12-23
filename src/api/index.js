@@ -42,7 +42,11 @@ function editWishlist(userId, wishlistId, wishlist, successCallback, errorCallba
 }
 
 function sendWishlistsOrder(userId, order, successCallback, errorCallback) {
-	request('PUT', `${serverUri}/user/${userId}/wishlist/`, order, successCallback, errorCallback, apiToken)
+	request('PUT', `${serverUri}/user/${userId}/wishlist/order`, order, successCallback, errorCallback, apiToken)
+}
+
+function sendItemsOrder(userId, wishlistId, order, successCallback, errorCallback) {
+	request('PUT', `${serverUri}/user/${userId}/wishlist/${wishlistId}/order`, order, successCallback, errorCallback, apiToken)
 }
 
 export default {
@@ -56,5 +60,6 @@ export default {
 	editItem,
 	changeItemState,
 	editWishlist,
-	sendWishlistsOrder
+	sendWishlistsOrder,
+	sendItemsOrder
 }

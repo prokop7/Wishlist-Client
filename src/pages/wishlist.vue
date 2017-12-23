@@ -25,15 +25,32 @@
 				</el-button>
 			</div>
 			<div class="items-body u-fancy-scrollbar">
-				<item v-for="item in wishlist.items"
-				      :key="item.id"
-				      :item="item"
-				      :wishlistId="wishlist.id"
-				      :userId="$route.params['userId']"
-				      :isMine="isMine">
-				</item>
+				<div v-for="item in wishlist.items"
+				     :key="item.id" class="item-container">
+					<div style="display: inline-block">
+						<el-button class="move-up-button"
+						           v-if="isMine"
+						           @click="moveItem(item, 1)"
+						           icon="el-icon-arrow-up"
+						           size="mini">
+						</el-button>
+						<el-button class="move-down-button"
+						           v-if="isMine"
+						           @click="moveItem(item, 0)"
+						           icon="el-icon-arrow-down"
+						           size="mini">
+						</el-button>
+					</div>
+					<item :item="item"
+					      :wishlistId="wishlist.id"
+					      :userId="$route.params['userId']"
+					      :isMine="isMine"
+					      style="display: inline-block; width: 240px;">
+					</item>
+				</div>
 			</div>
-			<div class="item" style="cursor: auto; background-color: #c4c9cc" v-if="wishlist.items.length == 0 && !isMine">
+			<div class="no-item-block"
+			     v-if="wishlist.items.length == 0">
 				{{$t('item.notItems')}}
 			</div>
 			<div class="card-footer">
@@ -89,10 +106,12 @@
 		           :visible.sync="itemCreateVisible">
 			<el-form :model="itemCreateForm" :ref="'itemCreateForm'" :rules="formRules">
 				<el-form-item :label="$t('item.name')" :label-width="formLabelWidth" prop="name">
-					<el-input type="textarea" autosize v-model="itemCreateForm.name" auto-complete="off" :autofocus="true"></el-input>
+					<el-input type="textarea" autosize v-model="itemCreateForm.name" auto-complete="off"
+					          :autofocus="true"></el-input>
 				</el-form-item>
 				<el-form-item :label="$t('item.description')" :label-width="formLabelWidth" prop="description">
-					<el-input type="textarea" autosize v-model="itemCreateForm.description" auto-complete="off"></el-input>
+					<el-input type="textarea" autosize v-model="itemCreateForm.description"
+					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item :label="$t('item.price')" :label-width="formLabelWidth" prop="price">
 					<el-input type="textarea" autosize v-model="itemCreateForm.price" auto-complete="off"></el-input>
@@ -215,6 +234,11 @@
 					}
 				});
 			},
+			moveItem(item, direction) {
+				// direction 1 - up, 0 - down
+				console.log(direction > 0 ? 'up' : 'down');
+				console.log(item.itemOrder)
+			},
 			setListener() {
 				window.addEventListener('keyup', this.keyListener);
 			},
@@ -244,7 +268,7 @@
 <style lang="scss">
 
 	.el-card__body {
-		padding: 0 10px;
+		padding: 0 10px 0 0;
 	}
 
 	.items-body {
@@ -273,6 +297,24 @@
 		margin: 0 5px 0 0;
 	}
 
+	.move-down-button:hover, .move-up-button:hover {
+		border: none;
+		display: block;
+		background-color: rgba(0,0,0,0.2);
+		padding: 0;
+		margin: 0!important;
+		height: 50%;
+	}
+	.move-down-button, .move-up-button {
+		border: none;
+		display: block;
+		background-color: transparent;
+		color: transparent;
+		padding: 0;
+		margin: 0!important;
+		height: 50%;
+	}
+
 	#edit-button {
 		float: right;
 		background-color: rgba(0, 0, 0, 0);
@@ -292,5 +334,22 @@
 		font-weight: 600;
 		color: #333;
 		font-size: 14px;
+	}
+
+	.item-container {
+		display: flex;
+		margin: 5px 0;
+	}
+
+	.card-footer {
+		padding: 0 10px;
+	}
+
+	.no-item-block {
+		cursor: auto;
+		background-color: #c4c9cc;
+		font-size: 12px;
+		margin: 0 10px;
+		width: 95%;
 	}
 </style>

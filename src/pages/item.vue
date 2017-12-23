@@ -200,7 +200,7 @@
 		width: 95%;
 		padding: 1% 3%;
 		min-height: 17px;
-		margin: 0 auto 7px auto;
+		margin: 0 auto 0 auto;
 		cursor: pointer;
 		font-weight: 400;
 		font-size: 12px;
