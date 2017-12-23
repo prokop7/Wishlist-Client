@@ -46,7 +46,7 @@ function sendWishlistsOrder(userId, order, successCallback, errorCallback) {
 }
 
 function sendItemsOrder(userId, wishlistId, order, successCallback, errorCallback) {
-	request('PUT', `${serverUri}/user/${userId}/wishlist/${wishlistId}/order`, order, successCallback, errorCallback, apiToken)
+	request('PUT', `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/order`, order, successCallback, errorCallback, apiToken)
 }
 
 export default {

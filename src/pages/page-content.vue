@@ -164,7 +164,7 @@
 						this.wishlists.sort(function (w1, w2) {
 							return w1.wishlistOrder - w2.wishlistOrder
 						});
-						this.sendOrder()
+						this.sendWishlistsOrder()
 					}
 				} else {
 					if (checkBoundaries(this.wishlists[i].wishlistOrder - 1) &&
@@ -174,11 +174,11 @@
 						this.wishlists.sort(function (w1, w2) {
 							return w1.wishlistOrder - w2.wishlistOrder
 						});
-						this.sendOrder()
+						this.sendWishlistsOrder()
 					}
 				}
 			},
-			sendOrder() {
+			sendWishlistsOrder() {
 				let orders = [];
 				this.wishlists.forEach(wishlist => orders.push({
 					id: wishlist.id,

@@ -236,8 +236,50 @@
 			},
 			moveItem(item, direction) {
 				// direction 1 - up, 0 - down
-				console.log(direction > 0 ? 'up' : 'down');
-				console.log(item.itemOrder)
+				let i = item.itemOrder;
+				let _this = this;
+				let checkBoundaries = function (index) {
+					return index >= 0 && index < _this.wishlist.items.length
+				};
+				if (direction > 0) {
+					if (checkBoundaries(this.wishlist.items[i].itemOrder - 1) &&
+						checkBoundaries(this.wishlist.items[i - 1].itemOrder + 1)) {
+						this.wishlist.items[i].itemOrder--;
+						this.wishlist.items[i - 1].itemOrder++;
+						this.wishlist.items.sort(function (i1, i2) {
+							return i1.itemOrder - i2.itemOrder
+						});
+						this.sendItemsOrder()
+					}
+				} else {
+					if (checkBoundaries(this.wishlist.items[i].itemOrder + 1) &&
+						checkBoundaries(this.wishlist.items[i + 1].itemOrder - 1)) {
+						this.wishlist.items[i].itemOrder++;
+						this.wishlist.items[i + 1].itemOrder--;
+						this.wishlist.items.sort(function (i1, i2) {
+							return i1.itemOrder - i2.itemOrder
+						});
+						this.sendItemsOrder()
+					}
+				}
+			},
+			sendItemsOrder() {
+				let orders = [];
+				this.wishlist.items.forEach(item => orders.push({
+					id: item.id,
+					itemOrder: item.itemOrder
+				}));
+				let _this = this;
+				Ajax.sendItemsOrder(
+					this.$store.state.user.id,
+					this.wishlist.id,
+					orders,
+					() => _this.$message({
+						message: _this.$t('orderUpdated'),
+						showClose: true,
+					}),
+					(e) => console.log(e)
+				)
 			},
 			setListener() {
 				window.addEventListener('keyup', this.keyListener);

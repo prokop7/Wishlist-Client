@@ -33,7 +33,7 @@ export const messages = {
 			itemCreated: 'The item was created',
 			wishlistCreated: 'The wishlist was created',
 			wishlistEdit: 'The wishlist was edited',
-			orderUpdated: 'The wishlists order was updated'
+			orderUpdated: 'The order was updated'
 		},
 		itemName: 'Item: ',
 		item: {
