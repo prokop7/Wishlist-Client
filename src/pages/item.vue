@@ -15,36 +15,36 @@
 		</div>
 
 		<el-dialog
-				:title="isMine?'Edit':'View'"
+				:title="$t(isMine?'edit':'view')"
 				:visible.sync="itemVisible"
 				width="50%"
 				center
 				v-if="itemVisibleObject" style="position: static">
 			<el-form :model="itemVisibleObject" :ref="'itemEditForm'" :rules="formRules">
-				<el-form-item label="Item name" :label-width="formLabelWidth" prop="name">
+				<el-form-item :label="$t('item.name')" :label-width="formLabelWidth" prop="name">
 					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
 					          v-model="itemVisibleObject.name"
 					          auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="Item description" :label-width="formLabelWidth" prop="description">
+				<el-form-item :label="$t('item.description')" :label-width="formLabelWidth" prop="description">
 					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
 					          v-model="itemVisibleObject.description"
 					          auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="Item price" :label-width="formLabelWidth" prop="price">
+				<el-form-item :label="$t('item.price')" :label-width="formLabelWidth" prop="price">
 					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
 					          v-model="itemVisibleObject.price"
 					          auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="Item link" :label-width="formLabelWidth" prop="link">
+				<el-form-item :label="$t('item.link')" :label-width="formLabelWidth" prop="link">
 					<el-input type="textarea" autosize :disabled="!isMine||item.state===2"
 					          v-model="itemVisibleObject.link"
 					          auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item v-if="isMine&&item.state!==2">
-					<el-button type="primary" @click="editItem(true);removeListener();" :autofocus="true">Save
+					<el-button type="primary" @click="editItem(true);removeListener();" :autofocus="true">{{$t('save')}}
 					</el-button>
-					<el-button @click="itemVisible=false;removeListener();">Cancel</el-button>
+					<el-button @click="itemVisible=false;removeListener();">{{$t('cancel')}}</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -64,11 +64,11 @@
 		data() {
 			return {
 				itemVisible: false,
-				formLabelWidth: '120px',
+				formLabelWidth: '160px',
 				formRules: {
 					name: [
-						{required: true, message: 'Please input a name', trigger: 'blur'},
-						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
+						{required: true, message: this.$t('input.name'), trigger: 'blur'},
+						{min: 3, message: this.$t('input.length'), trigger: 'blur'}
 					],
 				},
 				previousName: "",
@@ -86,7 +86,7 @@
 						_this.itemVisibleObject.id,
 						_this.itemVisibleObject,
 						data => {
-							_this.$message({message: 'The item was saved', showClose: true,});
+							_this.$message({message: _this.$t('messages.itemSaved'), showClose: true,});
 							_this.$emit('loadWishlists', data)
 						},
 						e => console.log(e));
@@ -170,12 +170,12 @@
 			buttonText() {
 				let state = this.item.state;
 				if (state === 3)
-					return 'Cancel';
+					return this.$t("cancel");
 				if (state === 0)
 					if (this.isMine)
-						return 'Accept';
+						return this.$t("accept");
 					else
-						return 'Take';
+						return this.$t('take');
 				return '';
 			}
 		},

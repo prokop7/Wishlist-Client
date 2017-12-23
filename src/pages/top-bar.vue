@@ -11,26 +11,26 @@
 				active-text-color="#FFFFFF"
 		>
 			<el-menu-item index="photo"
-			              v-if="isSigned()"
+			              v-if="isSigned"
 			              :route="/user/ + $store.state.user.id">
 				<img :src="$store.state.user.photoLink" style="height: 50px; border-radius: 50%" alt="">
 			</el-menu-item>
 			<el-menu-item index="user"
-			              v-if="isSigned()"
+			              v-if="isSigned"
 			              :route="/user/ + $store.state.user.id">
 				{{$store.state.user.name}}
 			</el-menu-item>
 			<el-menu-item index="friends"
 			              @click=""
-			              v-if="isSigned()"
+			              v-if="isSigned"
 			              route="#">
 				<el-select v-model="optionValue"
 				           filterable
-				           placeholder="Friends"
+				           :placeholder="$t('friends')"
 				           @change="selectChange"
-				           noDataText="No registered friends"
-				           noMatchText="Not found">
-					<el-option-group label="Registered">
+				           :noDataText="$t('noRegisteredFriends')"
+				           :noMatchText="$t('notFound')">
+					<el-option-group :label="$t('registered')">
 						<el-option
 								v-for="friend in $store.getters.friends"
 								:key="friend.id"
@@ -40,7 +40,7 @@
 						>
 						</el-option>
 					</el-option-group>
-					<el-option-group label="Not registered">
+					<el-option-group :label="$t('notRegistered')">
 						<el-option
 								v-for="friend in $store.getters.friends"
 								:key="friend.id"
@@ -56,15 +56,24 @@
 			<el-menu-item
 					index="login"
 					id="login-link">
-				<a :href="loginRef()"
-				   target="_self">{{isSigned() ? "Logout" : "Login"}}</a>
+				<a :href="loginRef"
+				   target="_self">{{$t(isSigned ? "logout" : "login")}}</a>
+			</el-menu-item>
+			<el-menu-item index="locale" id="locale-change" route="#">
+				<el-select :value="$i18n.locale" @change="setLocale" style="width: 100px">
+					<el-option
+							v-for="locale in locales"
+							:key="locale.value"
+							:label="locale.name"
+							:value="locale.value"
+					></el-option>
+				</el-select>
 			</el-menu-item>
 		</el-menu>
 	</div>
 </template>
 <script>
-	import ElOptionGroup from "../../node_modules/element-ui/packages/select/src/option-group.vue";
-	import {redirectUri} from "@/config"
+	import {redirectUri, locales} from "@/config"
 
 	const loginUri = `https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=${redirectUri}`;
 
@@ -72,23 +81,15 @@
 		data: function () {
 			return {
 				optionValue: '',
+				locales
 			}
 		},
-		components: {ElOptionGroup},
+		components: {},
 		methods: {
-			handleSelect: function (selected) {
-				console.log(selected)
-			},
-			isSigned: function () {
-				return !!this.$store.state.token
-			},
-			loginRef: function () {
-				return this.isSigned() ? "#" : loginUri
-			},
-			selectChange: function (userId) {
+			selectChange(userId) {
 				this.$router.push('/user/' + userId)
 			},
-			selectedMenu: function (index) {
+			selectedMenu(index) {
 				if (index !== 'friends') {
 					this.optionValue = "";
 					if (index === 'login')
@@ -96,7 +97,18 @@
 					else
 						this.$router.push("/user/" + this.$store.state.user.id);
 				}
+			},
+			setLocale(locale) {
+				this.$i18n.locale = locale;
 			}
+		},
+		computed: {
+			isSigned() {
+				return !!this.$store.state.token
+			},
+			loginRef() {
+				return this.isSigned ? "#" : loginUri
+			},
 		}
 	}
 </script>
@@ -106,8 +118,14 @@
 		overflow-y: scroll;
 		height: 500px;
 	}
-	#login-link {
+
+	#locale-change {
 		float: right;
 		padding-right: 20px;
 	}
+
+	#login-link {
+		float: right;
+		padding-right: 20px;
+		}
 </style>

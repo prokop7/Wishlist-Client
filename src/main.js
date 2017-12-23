@@ -2,14 +2,18 @@ import Vue from 'vue'
 import router from './router'
 import App from './app.vue'
 import Vuex from 'vuex'
+import VueI18n from 'vue-i18n'
 
 import ElementUI from 'element-ui'
 import {Menu, MenuItem} from 'element-ui'
+import {messages} from "./config";
 
 import styles from './css/scrollbars.css'
 
 Vue.use(Vuex);
+Vue.use(VueI18n);
 Vue.use(ElementUI);
+
 
 const myMenu = {
 	mixins: [Menu],
@@ -27,10 +31,11 @@ const myMenu = {
 const myMenuItem = {
 	mixins: [MenuItem],
 	computed: {
-		backgroundColor() {return `rgba(0, 0, 0, 0)`},
-		// hoverBackground() {return "00000019"}
+		backgroundColor() {
+			return `transparent`
+		},
 	}
-}
+};
 
 Vue.component(Menu.name, myMenu);
 Vue.component(MenuItem.name, myMenuItem);
@@ -80,6 +85,12 @@ const store = new Vuex.Store({
 	}
 });
 
+const i18n = new VueI18n({
+	locale: 'en', // set locale
+	fallbackLocale: 'en',
+	messages, // set locale messages
+	silentTranslationWarn: true
+});
 
 export const mainVue = new Vue({
 	el: '#app',
@@ -88,6 +99,7 @@ export const mainVue = new Vue({
 		'app': App
 	},
 	router,
-	store
+	store,
+	i18n
 }).$mount("#app");
 

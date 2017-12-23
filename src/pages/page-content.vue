@@ -11,31 +11,31 @@
 				</wishlist>
 			</div>
 		</div>
-		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true" style="margin-right: 20px">Create wishlist</el-button>
-		<el-dialog :title="'Wishlist: ' + wishlistCreateForm.name"
+		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true" style="margin-right: 20px">{{$t('createWishlist')}}</el-button>
+		<el-dialog :title="$t('wishlistName') + wishlistCreateForm.name"
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
-				<el-form-item label="Wishlist name" :label-width="formLabelWidth" prop="name">
+				<el-form-item :label="$t('wishlist.name')" :label-width="formLabelWidth" prop="name">
 					<el-input type="textarea" autosize v-model="wishlistCreateForm.name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="Visibility" :label-width="formLabelWidth" prop="visibility">
+				<el-form-item :label="$t('wishlist.visibility')" :label-width="formLabelWidth" prop="visibility">
 					<el-select v-model="wishlistCreateForm.visibility"
 					           placeholder="please select visibility">
-						<el-option label="Public" value=2></el-option>
-						<el-option label="Private" value=0></el-option>
+						<el-option :label="$t('public')" value=2></el-option>
+						<el-option :label="$t('private')" value=0></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="Friend exclusion"
+				<el-form-item :label="$t('wishlist.exclusions')"
 				              :label-width="formLabelWidth"
 				              prop="friend-exclusion">
 					<el-select
 							v-model="wishlistCreateForm.friendExclusion"
 							multiple
 							:clearable="true"
-							placeholder="Select"
 							:collapseTags="true"
-							noDataText="No registered friends"
-							noMatchText="Not found">
+							:placeholder="$t('select')"
+							:noDataText="$t('noRegisteredFriends')"
+							:noMatchText="$t('notFound')">
 						<el-option
 								v-for="friend in this.$store.getters.friends"
 								v-if="friend.registered"
@@ -46,8 +46,8 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="createWishlist()">Submit</el-button>
-					<el-button @click="wishlistFormVisible = false">Cancel</el-button>
+					<el-button type="primary" @click="createWishlist()">{{$t('save')}}</el-button>
+					<el-button @click="wishlistFormVisible = false">{{$t('cancel')}}</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -74,15 +74,15 @@
 				},
 				formRules: {
 					name: [
-						{required: true, message: 'Please input a name', trigger: 'blur'},
-						{min: 3, message: 'Length should be at least 3 character', trigger: 'blur'}
+						{required: true, message: this.$t('input.name'), trigger: 'blur'},
+						{min: 3, message: this.$t('input.length'), trigger: 'blur'}
 					],
 					visibility: [
-						{required: true, message: 'Please select visibility option', trigger: 'blur'}
+						{required: true, message: this.$t('input.visibility'), trigger: 'blur'}
 					],
 					friendExclusion: []
 				},
-				formLabelWidth: '120px',
+				formLabelWidth: '160px',
 			};
 		},
 		methods: {
@@ -119,7 +119,7 @@
 							userId,
 							wishlist,
 							(data) => {
-								_this.$message({message: 'The wishlist was created', showClose: true,});
+								_this.$message({message: _this.$t('messages.wishlistCreated'), showClose: true,});
 								_this.loadWishlists(data)
 							},
 							this.errorHandle);
@@ -189,7 +189,7 @@
 					this.$store.state.user.id,
 					orders,
 					() => _this.$message({
-						message: 'The wishlists order was updated',
+						message: _this.$t('orderUpdated'),
 						showClose: true,
 					}),
 					(e) => console.log(e)
