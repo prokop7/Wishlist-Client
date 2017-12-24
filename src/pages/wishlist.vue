@@ -23,6 +23,7 @@
 				           icon="el-icon-edit"
 				           size="mini">
 				</el-button>
+				<div class="vk-share-button" v-html="vkShareButton"></div>
 			</div>
 			<div class="items-body u-fancy-scrollbar">
 				<div v-for="item in wishlist.items"
@@ -130,9 +131,11 @@
 <script>
 	import Ajax from '@/api'
 	import Item from './item.vue'
+	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 
 	export default {
 		components: {
+			ElButton,
 			Item
 		},
 		props: {
@@ -143,6 +146,12 @@
 			return {
 				activeItem: "",
 				itemCreateVisible: false,
+				vkShareButton: VK.Share.button({
+					title: "Look at my wishlist: \"" + this.wishlist.name + "\" on a new site"
+				}, {
+					type: "custom",
+					text: "<img src=\"https://vk.com/images/share_32.png\" width=\"13\" height=\"13\" />"
+				}),
 				itemCreateForm: {
 					name: "",
 					description: "",
@@ -328,7 +337,7 @@
 		background-color: rgba(0, 0, 0, 0);
 		border: none;
 		padding: 4px 0;
-		margin: 0 0 0 10px;
+		margin: 0 0 0 6px;
 	}
 
 	.move-left-button {
@@ -342,18 +351,19 @@
 	.move-down-button:hover, .move-up-button:hover {
 		border: none;
 		display: block;
-		background-color: rgba(0,0,0,0.2);
+		background-color: rgba(0, 0, 0, 0.2);
 		padding: 0;
-		margin: 0!important;
+		margin: 0 !important;
 		height: 50%;
 	}
+
 	.move-down-button, .move-up-button {
 		border: none;
 		display: block;
 		background-color: transparent;
 		color: transparent;
 		padding: 0;
-		margin: 0!important;
+		margin: 0 !important;
 		height: 50%;
 	}
 
@@ -364,6 +374,13 @@
 		padding: 4px 0 0;
 	}
 
+	.vk-share-button {
+		float: right;
+		margin: 3px 0;
+		display: inline-block;
+		border-radius: 50%;
+	}
+
 	.box-card {
 		width: 100%;
 		background-color: #E2E4E6;
@@ -372,7 +389,7 @@
 	.wishlist-name {
 		vertical-align: middle;
 		display: inline-block;
-		width: 75%;
+		width: 70%;
 		font-weight: 600;
 		color: #333;
 		font-size: 14px;
