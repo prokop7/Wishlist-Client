@@ -51,6 +51,7 @@ export const messages = {
 			visibility: 'Visibility',
 			exclusions: 'Friend exclusions'
 		},
+		shareMessage: "Look at my wishlist: \"{name}\" on a new site"
 	},
 	ru: {
 		accept: 'Принять',
@@ -93,6 +94,7 @@ export const messages = {
 			visibility: 'Область видимости',
 			exclusions: 'Исключения'
 		},
+		shareMessage: "Посмотри на мой список желаний: \"{name}\" на новом сайте!"
 	}
 };
 

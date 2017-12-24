@@ -147,12 +147,6 @@
 			return {
 				activeItem: "",
 				itemCreateVisible: false,
-				vkShareButton: VK.Share.button({
-					title: "Look at my wishlist: \"" + this.wishlist.name + "\" on a new site"
-				}, {
-					type: "custom",
-					text: "<img src=\"https://vk.com/images/share_32.png\" width=\"13\" height=\"13\" />"
-				}),
 				itemCreateForm: {
 					name: "",
 					description: "",
@@ -324,7 +318,16 @@
 		},
 		mounted: function () {
 		},
-
+		computed: {
+			vkShareButton() {
+				return VK.Share.button({
+					title: this.$t('shareMessage', {name: this.wishlist.name})
+				}, {
+					type: "custom",
+					text: "<img src=\"https://vk.com/images/share_32.png\" width=\"13\" height=\"13\" />"
+				})
+			}
+		},
 		beforeDestroy: function () {
 			this.removeListener()
 		}

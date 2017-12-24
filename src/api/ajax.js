@@ -42,12 +42,3 @@ export function request(type, url, data, successCallback, errorCallback, token) 
 	xhr.responseType = 'json';
 	xhr.send(JSON.stringify(data));
 }
-
-
-export function getRequest(url, successCallback, errorCallback) {
-	request("GET", url, '', successCallback, errorCallback);
-}
-
-export default {
-	request
-}
