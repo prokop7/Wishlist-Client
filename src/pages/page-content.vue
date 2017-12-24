@@ -5,6 +5,7 @@
 			<div class="grid-content">
 				<wishlist
 						@loadWishlists="loadWishlists"
+						@deleteWishlist="deleteWishlist"
 						:isMine="isUser()"
 						@move="move"
 						:wishlist="wishlist">
@@ -137,6 +138,20 @@
 						return false;
 					}
 				});
+			},
+			deleteWishlist(wishlist) {
+				let _this = this;
+				Ajax.deleteWishlist(
+					this.$store.state.user.id,
+					wishlist.id,
+					() => {
+						_this.wishlists.splice(wishlist.wishlistOrder, 1);
+						let length = _this.wishlists.length;
+						for (let i = 0; i < length; i++)
+							_this.wishlists[i].wishlistOrder = i;
+					},
+					(e) => console.log(e)
+				)
 			},
 			isUser() {
 				return this.$route.params['userId'] == this.$store.state.user.id;
@@ -291,7 +306,7 @@
 	}
 
 	.el-dialog__body {
-		padding-bottom: 2px;
-		padding-top: 2px;
+		padding-bottom: 2px !important;
+		padding-top: 2px !important;
 	}
 </style>

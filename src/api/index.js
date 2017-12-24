@@ -49,6 +49,14 @@ function sendItemsOrder(userId, wishlistId, order, successCallback, errorCallbac
 	request('PUT', `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/order`, order, successCallback, errorCallback, apiToken)
 }
 
+function deleteWishlist(userId, wishlistId, successCallback, errorCallback) {
+	request('DELETE', `${serverUri}/user/${userId}/wishlist/${wishlistId}`, {}, successCallback, errorCallback, apiToken)
+}
+
+function deleteItem(userId, wishlistId, itemId, successCallback, errorCallback) {
+	request('DELETE', `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/${itemId}`, {}, successCallback, errorCallback, apiToken)
+}
+
 export default {
 	setToken,
 	getWishlists,
@@ -61,5 +69,7 @@ export default {
 	changeItemState,
 	editWishlist,
 	sendWishlistsOrder,
-	sendItemsOrder
+	sendItemsOrder,
+	deleteWishlist,
+	deleteItem
 }

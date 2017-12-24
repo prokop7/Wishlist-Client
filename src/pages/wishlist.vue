@@ -46,6 +46,7 @@
 					      :wishlistId="wishlist.id"
 					      :userId="$route.params['userId']"
 					      :isMine="isMine"
+					      @deleteItem="deleteItem"
 					      style="display: inline-block; width: 240px;">
 					</item>
 				</div>
@@ -100,6 +101,8 @@
 				<el-form-item>
 					<el-button type="primary" @click="editWishlist(wishlist)">{{$t('save')}}</el-button>
 					<el-button @click="wishlistFormVisible=false">{{$t('cancel')}}</el-button>
+					<el-button class="delete-button" @click="$emit('deleteWishlist', wishlist)"
+					           type="danger" icon="el-icon-delete"></el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -131,11 +134,9 @@
 <script>
 	import Ajax from '@/api'
 	import Item from './item.vue'
-	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 
 	export default {
 		components: {
-			ElButton,
 			Item
 		},
 		props: {
@@ -290,6 +291,21 @@
 					(e) => console.log(e)
 				)
 			},
+			deleteItem(item) {
+				let _this = this;
+				Ajax.deleteItem(
+					this.$store.state.user.id,
+					this.wishlist.id,
+					item.id,
+					() => {
+						_this.wishlist.items.splice(item.itemOrder, 1);
+						let length = _this.wishlist.items.length;
+						for (let i = 0; i < length; i++)
+							_this.wishlist.items[i].itemOrder = i;
+					},
+					(e) => console.log(e)
+				)
+			},
 			setListener() {
 				window.addEventListener('keyup', this.keyListener);
 			},
@@ -410,5 +426,17 @@
 		font-size: 12px;
 		margin: 0 10px;
 		width: 95%;
+	}
+
+	.delete-button {
+		float: right;
+		background-color: transparent;
+		color: #333;
+		border: none;
+	}
+
+	.delete-button:hover {
+		background-color: #f56c6c;
+		color: #fff;
 	}
 </style>

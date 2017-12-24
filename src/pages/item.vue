@@ -41,10 +41,22 @@
 					          v-model="itemVisibleObject.link"
 					          auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item v-if="isMine&&item.state!==2">
-					<el-button type="primary" @click="editItem(true);removeListener();" :autofocus="true">{{$t('save')}}
+				<el-form-item v-if="isMine">
+					<el-button v-if="item.state!==2"
+					           type="primary"
+					           @click="editItem(true);removeListener();"
+					           :autofocus="true">
+						{{$t('save')}}
 					</el-button>
-					<el-button @click="itemVisible=false;removeListener();">{{$t('cancel')}}</el-button>
+					<el-button v-if="item.state!==2"
+					           @click="itemVisible=false;removeListener();">
+						{{$t('cancel')}}
+					</el-button>
+					<el-button class="delete-button"
+					           @click="$emit('deleteItem', item);itemVisible=false;removeListener();"
+					           type="danger"
+					           icon="el-icon-delete">
+					</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -224,5 +236,4 @@
 		top: 50%;
 		transform: translateY(-50%);
 	}
-
 </style>
