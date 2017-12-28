@@ -10,16 +10,37 @@
 				text-color="#FFF"
 				active-text-color="#FFFFFF"
 		>
-			<el-menu-item index="photo"
-			              v-if="isSigned"
-			              :route="/user/ + $store.state.user.id">
-				<img :src="$store.state.user.photoLink" style="height: 50px; border-radius: 50%" alt="">
-			</el-menu-item>
-			<el-menu-item index="user"
-			              v-if="isSigned"
-			              :route="/user/ + $store.state.user.id">
-				{{$store.state.user.name}}
-			</el-menu-item>
+			<el-submenu index="photo"
+			            v-if="isSigned"
+			            :route="/user/ + $store.state.user.id">
+				<template slot="title">
+					<img :src="$store.state.user.photoLink" style="height: 50px; border-radius: 50%" alt="">
+				</template>
+				<el-menu-item index="user"
+				              :route="/user/ + $store.state.user.id" style="color: #333;">
+					{{$t("myWishlists")}}
+					<!--{{$store.state.user.name}}-->
+				</el-menu-item>
+				<el-menu-item index="background"
+				              id="background-change"
+				              route="#"
+				              style="color: #333;">
+					{{$t("backgroundColor")}}
+					<el-color-picker size="mini" v-model="backgroundColor"></el-color-picker>
+				</el-menu-item>
+				<el-menu-item index="refreshFriends"
+				              style="color: #333;"
+				              route="#"
+				              @click="refreshFriends">
+					{{$t("refreshFriends")}}
+				</el-menu-item>
+				<el-menu-item
+						index="logout"
+						@click="loginProcess()"
+						style="color: #333;">
+					<a href="#" style="text-decoration: none !important;" target="_self">{{$t("logout")}}</a>
+				</el-menu-item>
+			</el-submenu>
 			<el-menu-item index="friends"
 			              @click=""
 			              v-if="isSigned"
@@ -53,17 +74,13 @@
 						</el-option>
 					</el-option-group>
 				</el-select>
-				<el-button icon="el-icon-refresh"
-				           @click="refreshFriends"
-				           size="mini"
-				           id="refresh-friends-button"></el-button>
 			</el-menu-item>
 			<el-menu-item
+					v-if="!isSigned"
 					index="login"
 					id="login-link"
 					@click="loginProcess()">
-				<a href="#"
-				   target="_self">{{$t(isSigned ? "logout" : "login")}}</a>
+				<a href="#" target="_self">{{$t("login")}}</a>
 			</el-menu-item>
 			<el-menu-item index="locale" id="locale-change" route="#">
 				<el-select :value="$i18n.locale" @change="setLocale" style="width: 100px">
@@ -75,21 +92,17 @@
 					></el-option>
 				</el-select>
 			</el-menu-item>
-			<el-menu-item index="background" id="background-change" route="#">
-				<el-color-picker size="mini" v-model="backgroundColor"></el-color-picker>
-			</el-menu-item>
 		</el-menu>
 	</div>
 </template>
 <script>
 	import Ajax from "@/api"
 	import {redirectUri, locales} from "@/config"
-	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
-
 	const loginUri = `https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=${redirectUri}`;
 
 	export default {
-		components: {ElButton},
+		components: {
+		},
 		data: function () {
 			return {
 				optionValue: '',
@@ -103,7 +116,7 @@
 			selectedMenu(index) {
 				if (index !== 'friends') {
 					this.optionValue = "";
-					if (index === 'user' || index === 'photo')
+					if (index === 'user')
 						this.$router.push("/user/" + this.$store.state.user.id);
 				}
 			},
@@ -112,12 +125,10 @@
 			},
 			loginProcess() {
 				if (this.isSigned) {
-					console.log('logout');
 					this.$store.commit('token', "");
 					localStorage.removeItem('token');
 					this.$router.push("/registration");
 				} else {
-					console.log(this.$store.state);
 					window.open(loginUri, "_self");
 				}
 			},
@@ -128,7 +139,10 @@
 				Ajax.refreshFriends(
 					userId,
 					locale,
-					(friends) => _this.$store.commit('friends', friends),
+					(friends) => {
+						_this.$message({message: _this.$t('messages.refreshed'), showClose: true});
+						_this.$store.commit('friends', friends);
+					},
 					(e) => console.log(e)
 				)
 			}
@@ -167,8 +181,9 @@
 
 <style lang="scss">
 	.el-menu--horizontal .el-submenu > .el-menu {
-		overflow-y: scroll;
-		height: 500px;
+		background-color: #ffffff !important;
+		color: #333333 !important;
+		border-radius: 5px;
 	}
 
 	#locale-change {
@@ -176,14 +191,9 @@
 		padding-right: 20px;
 	}
 
-	#login-link {
-		float: right;
-		padding-right: 20px;
-	}
-
 	#background-change {
-		float: right;
-		padding-right: 20px;
+		padding: 0;
+		border: none;
 	}
 
 	.el-icon-refresh {
@@ -199,5 +209,9 @@
 
 	#refresh-friends-button:hover {
 		background-color: rgba(0, 0, 0, 0.3);
+	}
+
+	.el-color-picker--mini .el-color-picker__trigger {
+		border: none;
 	}
 </style>

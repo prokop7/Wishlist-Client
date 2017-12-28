@@ -19,6 +19,9 @@ export const messages = {
 		logout: 'Logout',
 		public: 'Public',
 		private: 'Private',
+		refreshFriends: "Refresh friends",
+		myWishlists: 'My wishlists',
+		backgroundColor: 'Background color',
 		registered: 'Registered',
 		notRegistered: 'Not registered',
 		noRegisteredFriends: 'No registered friends',
@@ -33,7 +36,8 @@ export const messages = {
 			itemCreated: 'The item was created',
 			wishlistCreated: 'The wishlist was created',
 			wishlistEdit: 'The wishlist was edited',
-			orderUpdated: 'The order was updated'
+			orderUpdated: 'The order was updated',
+			refreshed: 'Refreshed'
 		},
 		itemName: 'Item: ',
 		item: {
@@ -61,7 +65,12 @@ export const messages = {
 		edit: 'Редикатировать',
 		view: 'Просмотри',
 		select: 'Выбрать',
+		login: 'Войти',
+		logout: 'Выйти',
 		friends: 'Друзья',
+		refreshFriends: 'Обновить друзей',
+		myWishlists: 'Мои списки желаний',
+		backgroundColor: 'Цвет фона',
 		registered: 'Зарегестрированы',
 		notRegistered: 'Не зарегестрированы',
 		noRegisteredFriends: 'Нет зарегестрированных друзей',
@@ -76,7 +85,8 @@ export const messages = {
 			itemCreated: 'Создано',
 			wishlistCreated: 'Создано',
 			wishlistEdit: 'Отредактировано',
-			orderUpdated: 'Отредактировано'
+			orderUpdated: 'Отредактировано',
+			refreshed: 'Обновлено'
 		},
 		itemName: 'Подарок: ',
 		item: {
