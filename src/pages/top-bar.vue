@@ -23,6 +23,7 @@
 			<el-menu-item index="friends"
 			              @click=""
 			              v-if="isSigned"
+			              style="padding-right: 5px"
 			              route="#">
 				<el-select v-model="optionValue"
 				           filterable
@@ -52,6 +53,10 @@
 						</el-option>
 					</el-option-group>
 				</el-select>
+				<el-button icon="el-icon-refresh"
+				           @click="refreshFriends"
+				           size="mini"
+				           id="refresh-friends-button"></el-button>
 			</el-menu-item>
 			<el-menu-item
 					index="login"
@@ -79,11 +84,12 @@
 <script>
 	import Ajax from "@/api"
 	import {redirectUri, locales} from "@/config"
+	import ElButton from "../../node_modules/element-ui/packages/button/src/button.vue";
 
 	const loginUri = `https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=${redirectUri}`;
 
 	export default {
-		components: {},
+		components: {ElButton},
 		data: function () {
 			return {
 				optionValue: '',
@@ -114,6 +120,17 @@
 					console.log(this.$store.state);
 					window.open(loginUri, "_self");
 				}
+			},
+			refreshFriends() {
+				let _this = this;
+				let userId = this.$store.state.user.id;
+				let locale = localStorage.getItem('locale');
+				Ajax.refreshFriends(
+					userId,
+					locale,
+					(friends) => _this.$store.commit('friends', friends),
+					(e) => console.log(e)
+				)
 			}
 		},
 		computed: {
@@ -167,5 +184,20 @@
 	#background-change {
 		float: right;
 		padding-right: 20px;
+	}
+
+	.el-icon-refresh {
+		margin-right: 2px !important;
+	}
+
+	#refresh-friends-button {
+		padding: 10px 0;
+		background-color: transparent;
+		color: #fff;
+		border: none;
+	}
+
+	#refresh-friends-button:hover {
+		background-color: rgba(0, 0, 0, 0.3);
 	}
 </style>

@@ -62,6 +62,10 @@ function editBackground(userId, color, successCallback, errorCallback) {
 	request("PUT", `${serverUri}/user/${userId}`, color, successCallback, errorCallback, apiToken)
 }
 
+function refreshFriends(userId, locale, successCallback, errorCallback) {
+	request("PUT", `${serverUri}/user/${userId}/friends/refresh?locale=${locale}`, {}, successCallback, errorCallback, apiToken);
+}
+
 export default {
 	setToken,
 	getWishlists,
@@ -77,5 +81,6 @@ export default {
 	sendItemsOrder,
 	deleteWishlist,
 	deleteItem,
-	editBackground
+	editBackground,
+	refreshFriends
 }
