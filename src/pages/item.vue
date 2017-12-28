@@ -2,7 +2,7 @@
 	<div id="item">
 		<div :id="'item-' + item.id" class="item" :style="'position: relative;background-color:' + itemColor">
 			<div class="item-name"
-			     @click="itemVisible=true;resizeTextAreas();setListener();">
+			     @click="itemVisible=true;resizeTextAreas();">
 				<p>{{item.name}}</p>
 			</div>
 			<el-button class="item-action-button" v-if="(item.state!==2&&item.state!==1)"
@@ -44,16 +44,16 @@
 				<el-form-item v-if="isMine">
 					<el-button v-if="item.state!==2"
 					           type="primary"
-					           @click="editItem(true);removeListener();"
+					           @click="editItem(true);"
 					           :autofocus="true">
 						{{$t('save')}}
 					</el-button>
 					<el-button v-if="item.state!==2"
-					           @click="itemVisible=false;removeListener();">
+					           @click="itemVisible=false;">
 						{{$t('cancel')}}
 					</el-button>
 					<el-button class="delete-button"
-					           @click="$emit('deleteItem', item);itemVisible=false;removeListener();"
+					           @click="$emit('deleteItem', item);itemVisible=false;"
 					           type="danger"
 					           icon="el-icon-delete">
 					</el-button>
@@ -97,9 +97,9 @@
 						_this.wishlistId,
 						_this.itemVisibleObject.id,
 						_this.itemVisibleObject,
-						data => {
+						() => {
 							_this.$message({message: _this.$t('messages.itemSaved'), showClose: true,});
-							_this.$emit('loadWishlists', data)
+							_this.$emit('commitEditingItem', _this.itemVisibleObject)
 						},
 						e => console.log(e));
 				};
@@ -127,21 +127,6 @@
 					newState,
 					() => _this.item.state = newState === 1 ? 3 : newState,
 					(e) => console.log(e))
-			},
-			setListener() {
-				window.addEventListener('keyup', this.keyListener);
-			},
-			removeListener() {
-				window.removeEventListener('keyup', this.keyListener)
-			},
-			keyListener(event) {
-				if (event.keyCode === 13)
-					if (this.itemVisible && this.isMine)
-						this.editItem();
-					else if (this.itemCreateVisible)
-						this.createItem();
-					else if (this.wishlistFormVisible)
-						this.editWishlist();
 			},
 			resizeTextAreas() {
 				this.$nextTick(() => {

@@ -3,7 +3,7 @@
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
 				<el-button class="move-left-button"
-				           @click="$emit('move', wishlist, 0)"
+				           @click="$emit('moveWishlist', wishlist, 0)"
 				           v-if="isMine"
 				           icon="el-icon-arrow-left"
 				           size="mini">
@@ -12,7 +12,7 @@
 					{{wishlist.name}}
 				</div>
 				<el-button class="move-right-button"
-				           @click="$emit('move', wishlist, 1)"
+				           @click="$emit('moveWishlist', wishlist, 1)"
 				           v-if="isMine"
 				           icon="el-icon-arrow-right"
 				           size="mini">
@@ -47,6 +47,7 @@
 					      :userId="$route.params['userId']"
 					      :isMine="isMine"
 					      @deleteItem="deleteItem"
+					      @commitEditingItem="commitEditingItem"
 					      style="display: inline-block; width: 240px;">
 					</item>
 				</div>
@@ -60,7 +61,7 @@
 					<el-button
 							type="text"
 							class="button"
-							@click="itemCreateVisible=true;setListener();">
+							@click="itemCreateVisible=true;">
 						{{$t('item.add')}}
 					</el-button>
 				</div>
@@ -124,8 +125,8 @@
 					<el-input type="textarea" autosize v-model="itemCreateForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="createItem();removeListener()">{{$t('save')}}</el-button>
-					<el-button @click="itemCreateVisible = false;removeListener()">{{$t('cancel')}}</el-button>
+					<el-button type="primary" @click="createItem();">{{$t('save')}}</el-button>
+					<el-button @click="itemCreateVisible = false;">{{$t('cancel')}}</el-button>
 				</el-form-item>
 			</el-form>
 		</el-dialog>
@@ -185,7 +186,7 @@
 							this.itemCreateForm,
 							function (data) {
 								_this.$message({message: _this.$t('itemCreated'), showClose: true,});
-								_this.$emit('loadWishlists', data)
+								_this.addItem(data);
 							},
 							this.errorHandle);
 						this.itemCreateForm = {}
@@ -193,6 +194,13 @@
 						return false;
 					}
 				});
+			},
+			addItem(response) {
+				this.wishlist.items.push(response)
+			},
+			commitEditingItem(item) {
+				let i = this.wishlist.items.findIndex((i1) => i1.id === item.id);
+				this.wishlist.items.splice(i, 1, item);
 			},
 			displayWishlist() {
 				this.wishlistEditForm = {
@@ -202,7 +210,6 @@
 				};
 				this.wishlist.exclusions.forEach(excl => this.wishlistEditForm.friendExclusion.push(excl.id));
 				this.wishlistFormVisible = true;
-				this.setListener()
 			},
 			editWishlist() {
 				this.$refs['wishlistEditForm'].validate((valid) => {
@@ -223,8 +230,8 @@
 							this.wishlist.id,
 							wishlist,
 							() => {
-								_this.$message({message: _this.$t('wishlistEdit'), showClose: true,});
-								_this.$emit('loadWishlists', userId)
+								_this.$message({message: _this.$t('messages.wishlistEdit'), showClose: true,});
+								_this.$emit('commitEditingWishlist', wishlist)
 							},
 							this.errorHandle);
 						this.wishlistEditForm = {
@@ -300,21 +307,6 @@
 					(e) => console.log(e)
 				)
 			},
-			setListener() {
-				window.addEventListener('keyup', this.keyListener);
-			},
-			removeListener() {
-				window.removeEventListener('keyup', this.keyListener)
-			},
-			keyListener(event) {
-				if (event.keyCode === 13)
-					if (this.itemVisible && this.isMine)
-						this.editItem();
-					else if (this.itemCreateVisible)
-						this.createItem();
-					else if (this.wishlistFormVisible)
-						this.editWishlist();
-			}
 		},
 		mounted: function () {
 		},
@@ -327,9 +319,6 @@
 					text: "<img src=\"https://vk.com/images/share_32.png\" width=\"13\" height=\"13\" />"
 				})
 			}
-		},
-		beforeDestroy: function () {
-			this.removeListener()
 		}
 	}
 
@@ -370,7 +359,8 @@
 	.move-down-button:hover, .move-up-button:hover {
 		border: none;
 		display: block;
-		background-color: rgba(0, 0, 0, 0.2);
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0.3);
 		padding: 0;
 		margin: 0 !important;
 		height: 50%;

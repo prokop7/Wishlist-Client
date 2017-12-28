@@ -4,10 +4,10 @@
 		     v-for="wishlist in wishlists">
 			<div class="grid-content">
 				<wishlist
-						@loadWishlists="loadWishlists"
+						@commitEditingWishlist="commitEditingWishlist"
 						@deleteWishlist="deleteWishlist"
 						:isMine="isUser()"
-						@move="move"
+						@moveWishlist="moveWishlist"
 						:wishlist="wishlist">
 				</wishlist>
 			</div>
@@ -126,7 +126,7 @@
 							wishlist,
 							(data) => {
 								_this.$message({message: _this.$t('messages.wishlistCreated'), showClose: true,});
-								_this.loadWishlists(data)
+								_this.addWishlist(data)
 							},
 							this.errorHandle);
 						this.wishlistCreateForm = {
@@ -138,6 +138,15 @@
 						return false;
 					}
 				});
+			},
+			addWishlist(response) {
+				this.wishlists.push(response);
+			},
+			commitEditingWishlist(wishlist) {
+				let i = this.wishlists.findIndex((w1) => w1.id === wishlist.id);
+				wishlist.items = this.wishlists[i].items;
+				wishlist.wishlsitOrder = this.wishlists[i].wishlsitOrder;
+				this.wishlists.splice(i, 1, wishlist);
 			},
 			deleteWishlist(wishlist) {
 				let _this = this;
@@ -175,7 +184,7 @@
 				this.$store.commit('setUser', result);
 				this.loading.user = false;
 			},
-			move(wishlist, direction) {
+			moveWishlist(wishlist, direction) {
 				let i = wishlist.wishlistOrder;
 				let _this = this;
 				let checkBoundaries = function (index) {
