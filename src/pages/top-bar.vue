@@ -70,22 +70,26 @@
 					></el-option>
 				</el-select>
 			</el-menu-item>
+			<el-menu-item index="background" id="background-change" route="#">
+				<el-color-picker size="mini" v-model="backgroundColor"></el-color-picker>
+			</el-menu-item>
 		</el-menu>
 	</div>
 </template>
 <script>
+	import Ajax from "@/api"
 	import {redirectUri, locales} from "@/config"
 
 	const loginUri = `https://oauth.vk.com/authorize?client_id=6284569&redirect_uri=${redirectUri}`;
 
 	export default {
+		components: {},
 		data: function () {
 			return {
 				optionValue: '',
 				locales
 			}
 		},
-		components: {},
 		methods: {
 			selectChange(userId) {
 				this.$router.push('/user/' + userId)
@@ -115,6 +119,23 @@
 		computed: {
 			isSigned() {
 				return !!this.$store.state.token
+			},
+			backgroundColor: {
+				get() {
+					return this.$store.getters.background
+				},
+				set(color) {
+					if (!color)
+						color = '#0079BF';
+					let _this = this;
+					Ajax.editBackground(
+						this.$store.state.user.id,
+						color,
+						() => _this.$store.commit('background', color),
+						(e) => console.log(e)
+					);
+
+				}
 			}
 		},
 		mounted() {
@@ -139,6 +160,11 @@
 	}
 
 	#login-link {
+		float: right;
+		padding-right: 20px;
+	}
+
+	#background-change {
 		float: right;
 		padding-right: 20px;
 	}

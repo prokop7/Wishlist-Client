@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import VueI18n from 'vue-i18n'
 
 import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/en'
 import {Menu, MenuItem} from 'element-ui'
 import {messages} from "./config";
 
@@ -12,7 +13,7 @@ import styles from './css/scrollbars.css'
 
 Vue.use(Vuex);
 Vue.use(VueI18n);
-Vue.use(ElementUI);
+Vue.use(ElementUI, {locale});
 
 
 const myMenu = {
@@ -42,12 +43,11 @@ Vue.component(MenuItem.name, myMenuItem);
 
 const store = new Vuex.Store({
 	state: {
-		count: 0,
 		user: {
 			id: 0,
 			name: "",
 			photoLink: "",
-			wishlists: [{name: "Blank", id: 0, items: []}],
+			wishlists: [{name: "Blank", id: 0, items: []}]
 		},
 		friends: [{name: "Default name", id: -1}],
 		token: ""
@@ -67,20 +67,23 @@ const store = new Vuex.Store({
 		},
 		wishlistsCount(state, getters) {
 			return getters.wishlists.length
+		},
+		background(state) {
+			return state.user.background ? state.user.background : '#0079BF';
 		}
 	},
 	mutations: {
-		increment(state) {
-			state.count++
-		},
 		setUser(state, user) {
-			state.user = user
+			state.user = user;
 		},
 		token(state, value) {
 			state.token = value
 		},
 		friends(state, friends) {
 			state.friends = friends
+		},
+		background(state, color) {
+			state.user.background = color
 		}
 	}
 });

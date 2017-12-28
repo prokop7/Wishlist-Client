@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<el-container>
+		<el-container :style="'background-color:' + $store.getters.background">
 			<el-header style="height: auto">
 				<top-bar></top-bar>
 			</el-header>
@@ -54,9 +54,8 @@
 		height: 100%;
 	}
 
-	.el-container, .el-main, #page-content {
+	.el-container{
 		height: 100%;
-		background-color: #0079BF;
 	}
 
 	html, body {

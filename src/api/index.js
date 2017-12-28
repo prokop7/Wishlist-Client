@@ -29,6 +29,7 @@ function getUserFriends(userId, successCallback, errorCallback) {
 function addItem(userId, wishlistId, item, successCallback, errorCallback) {
 	request("POST", `${serverUri}/user/${userId}/wishlist/${wishlistId}/item`, item, successCallback, errorCallback, apiToken)
 }
+
 function editItem(userId, wishlistId, itemId, item, successCallback, errorCallback) {
 	request("PUT", `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/${itemId}`, item, successCallback, errorCallback, apiToken)
 }
@@ -57,6 +58,10 @@ function deleteItem(userId, wishlistId, itemId, successCallback, errorCallback) 
 	request('DELETE', `${serverUri}/user/${userId}/wishlist/${wishlistId}/item/${itemId}`, {}, successCallback, errorCallback, apiToken)
 }
 
+function editBackground(userId, color, successCallback, errorCallback) {
+	request("PUT", `${serverUri}/user/${userId}`, color, successCallback, errorCallback, apiToken)
+}
+
 export default {
 	setToken,
 	getWishlists,
@@ -71,5 +76,6 @@ export default {
 	sendWishlistsOrder,
 	sendItemsOrder,
 	deleteWishlist,
-	deleteItem
+	deleteItem,
+	editBackground
 }
