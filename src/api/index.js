@@ -14,8 +14,8 @@ function addWishlist(userId, data, successCallback, errorCallback) {
 	request("POST", `${serverUri}/user/${userId}/wishlist`, data, successCallback, errorCallback, apiToken)
 }
 
-function registerWithCode(code, successCallback, errorCallback) {
-	request("GET", `${serverUri}/registration?code=${code}`, {}, successCallback, errorCallback)
+function registerWithCode(code, locale, successCallback, errorCallback) {
+	request("GET", `${serverUri}/registration?code=${code}&locale=${locale}`, {}, successCallback, errorCallback)
 }
 
 function getUser(userId, successCallback, errorCallback){
@@ -23,7 +23,7 @@ function getUser(userId, successCallback, errorCallback){
 }
 
 function getUserFriends(userId, successCallback, errorCallback) {
-	request("GET", `${serverUri}/user/${userId}/all_friends`, {}, successCallback, errorCallback, apiToken);
+	request("GET", `${serverUri}/user/${userId}/friends`, {}, successCallback, errorCallback, apiToken);
 }
 
 function addItem(userId, wishlistId, item, successCallback, errorCallback) {

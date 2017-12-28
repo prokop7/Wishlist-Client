@@ -23,12 +23,12 @@
 				           icon="el-icon-edit"
 				           size="mini">
 				</el-button>
-				<div class="vk-share-button" v-html="vkShareButton"></div>
+				<div v-if="isMine" class="vk-share-button" v-html="vkShareButton"></div>
 			</div>
 			<div class="items-body u-fancy-scrollbar">
 				<div v-for="item in wishlist.items"
 				     :key="item.id" class="item-container">
-					<div style="display: inline-block">
+					<div style="display: inline-block; width: 12px">
 						<el-button class="move-up-button"
 						           v-if="isMine"
 						           @click="moveItem(item, 1)"
