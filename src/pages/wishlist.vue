@@ -141,7 +141,7 @@
 			Item
 		},
 		props: {
-			wishlist: {name: "", id: 0, items: []},
+			wishlist: {},
 			isMine: false
 		},
 		data: function () {
@@ -193,7 +193,12 @@
 								_this.addItem(data);
 							},
 							this.errorHandle);
-						this.itemCreateForm = {}
+						this.itemCreateForm = {
+							name: "",
+							description: "",
+							price: "",
+							link: ""
+						}
 					} else {
 						return false;
 					}
@@ -337,7 +342,7 @@
 	.items-body {
 		overflow-y: auto;
 		overflow-x: hidden;
-		max-height: 70vh;
+		max-height: 78vh;
 	}
 
 	.el-card__header {

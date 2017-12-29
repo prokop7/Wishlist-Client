@@ -13,8 +13,7 @@
 			</div>
 		</div>
 		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true" style="margin-right: 20px">{{$t('createWishlist')}}</el-button>
-		<no-wishlists v-if="wishlists.length === 0 && !isUser()">
-		</no-wishlists>
+		<no-wishlists v-if="wishlists.length === 0 && !isUser() && !globalLoading"></no-wishlists>
 		<el-dialog :title="$t('wishlistName') + wishlistCreateForm.name"
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
@@ -69,7 +68,7 @@
 		},
 		data: function () {
 			return {
-				wishlists: [{name: "", id: 0, wishlistOrder: 0, items: []}],
+				wishlists: [],
 				loading: {
 					user: false,
 					wishlists: false,
@@ -265,6 +264,7 @@
 		},
 		watch: {
 			'$route'(to, from) {
+				this.loading.wishlists = true;
 				this.loadWishlists(to.params['userId']);
 			}
 		}

@@ -43,13 +43,8 @@ Vue.component(MenuItem.name, myMenuItem);
 
 const store = new Vuex.Store({
 	state: {
-		user: {
-			id: 0,
-			name: "",
-			photoLink: "",
-			wishlists: [{name: "Blank", id: 0, items: []}]
-		},
-		friends: [{name: "Default name", id: -1}],
+		user: {},
+		friends: [],
 		token: ""
 	},
 	getters: {
