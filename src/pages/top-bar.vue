@@ -214,4 +214,8 @@
 	.el-color-picker--mini .el-color-picker__trigger {
 		border: none;
 	}
+
+	#top-bar {
+		min-width: 500px;
+	}
 </style>

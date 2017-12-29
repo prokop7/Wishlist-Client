@@ -92,6 +92,10 @@
 				let _this = this;
 				let submit = function () {
 					_this.itemVisible = false;
+					_this.itemVisibleObject.name = _this.itemVisibleObject.name.trim();
+					_this.itemVisibleObject.link = _this.itemVisibleObject.link.trim();
+					_this.itemVisibleObject.price = _this.itemVisibleObject.price.trim();
+					_this.itemVisibleObject.description = _this.itemVisibleObject.description.trim();
 					Ajax.editItem(
 						_this.$store.state.user.id,
 						_this.wishlistId,

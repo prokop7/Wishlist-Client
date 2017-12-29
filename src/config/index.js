@@ -55,7 +55,9 @@ export const messages = {
 			visibility: 'Visibility',
 			exclusions: 'Friend exclusions'
 		},
-		shareMessage: "Look at my wishlist: \"{name}\" on a new site"
+		shareMessage: "Look at my wishlist: \"{name}\" on a new site",
+		helloMessage: "That's is awesome site for sharing you wishlists!<br>But you need to login",
+		noWishlists: "Sorry, but user didn't add wishlists<br>Remind him!"
 	},
 	ru: {
 		accept: 'Принять',
@@ -104,7 +106,9 @@ export const messages = {
 			visibility: 'Область видимости',
 			exclusions: 'Исключения'
 		},
-		shareMessage: "Посмотри на мой список желаний: \"{name}\" на новом сайте!"
+		shareMessage: "Посмотри на мой список желаний: \"{name}\" на новом сайте!",
+		helloMessage: "Это отличный сайт для того, чтобы поделиться своими желаниями на праздник!<br>Но тебе надо зарагестрироваться",
+		noWishlists: "К сожалению, пользователь еще не добавил себе списки желаемого!<br>Напомните ему!"
 	}
 };
 

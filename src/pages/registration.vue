@@ -1,6 +1,6 @@
 <template>
 	<div id="registration" v-loading.fullscreen.lock="loading">
-		{{state}}
+		<div class="hello-message"><p v-html="$t('helloMessage')"></p></div>
 	</div>
 </template>
 <script>
@@ -53,3 +53,18 @@
 		}
 	}
 </script>
+<style type="scss">
+	.hello-message {
+		position: sticky;
+		top: 20%;
+		left: 50%;
+		line-height: 60px;
+		color: #fff;
+		font-size: 56px;
+	}
+
+	#registration {
+		width: 100%;
+		text-align: center;
+	}
+</style>

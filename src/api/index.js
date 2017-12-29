@@ -63,7 +63,7 @@ function editBackground(userId, color, successCallback, errorCallback) {
 }
 
 function refreshFriends(userId, locale, successCallback, errorCallback) {
-	request("PUT", `${serverUri}/user/${userId}/friends/refresh?locale=${locale}`, {}, successCallback, errorCallback, apiToken);
+	request("GET", `${serverUri}/user/${userId}/friends/refresh?locale=${locale}`, {}, successCallback, errorCallback, apiToken);
 }
 
 export default {

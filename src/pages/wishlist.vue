@@ -180,6 +180,10 @@
 					if (valid) {
 						this.itemCreateVisible = false;
 						let _this = this;
+						this.itemCreateForm.name = this.itemCreateForm.name.trim();
+						this.itemCreateForm.link = this.itemCreateForm.link.trim();
+						this.itemCreateForm.price = this.itemCreateForm.price.trim();
+						this.itemCreateForm.description = this.itemCreateForm.description.trim();
 						Ajax.addItem(
 							this.$store.state.user.id,
 							this.wishlist.id,
@@ -221,7 +225,7 @@
 						this.wishlistEditForm.friendExclusion.forEach(exclusion => exclusions.push({id: exclusion}));
 						let wishlist = {
 							id: this.wishlist.id,
-							name: this.wishlistEditForm.name,
+							name: this.wishlistEditForm.name.trim(),
 							visibility: this.wishlistEditForm.visibility,
 							exclusions: exclusions
 						};

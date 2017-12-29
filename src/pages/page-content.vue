@@ -13,6 +13,8 @@
 			</div>
 		</div>
 		<el-button id="create-wishlist" v-if="isUser()" @click="wishlistFormVisible = true" style="margin-right: 20px">{{$t('createWishlist')}}</el-button>
+		<no-wishlists v-if="wishlists.length === 0 && !isUser()">
+		</no-wishlists>
 		<el-dialog :title="$t('wishlistName') + wishlistCreateForm.name"
 		           :visible.sync="wishlistFormVisible">
 			<el-form :model="wishlistCreateForm" ref="wishlistForm" :rules="formRules">
@@ -57,11 +59,13 @@
 <script>
 	import Ajax from "@/api"
 	import Wishlist from "./wishlist.vue"
+	import NoWishlists from "./no-wishlists.vue"
 	import JwtDecode from 'jwt-decode'
 
 	export default {
 		components: {
-			Wishlist
+			Wishlist,
+			NoWishlists
 		},
 		data: function () {
 			return {
@@ -116,7 +120,7 @@
 						let exclusions = [];
 						this.wishlistCreateForm.friendExclusion.forEach(exclusion => exclusions.push({id: exclusion}));
 						let wishlist = {
-							name: this.wishlistCreateForm.name,
+							name: this.wishlistCreateForm.name.trim(),
 							visibility: this.wishlistCreateForm.visibility,
 							exclusions: exclusions
 						};
@@ -271,6 +275,7 @@
 	#page-content {
 		text-align: left;
 		white-space: nowrap;
+		width: 100%;
 	}
 
 	.text {
@@ -317,5 +322,13 @@
 	.el-dialog__body {
 		padding-bottom: 2px !important;
 		padding-top: 2px !important;
+	}
+
+	#page-content {
+		background: -moz-element(#no-wishlists);
+	}
+
+	.el-dialog {
+		min-width: 400px;
 	}
 </style>
